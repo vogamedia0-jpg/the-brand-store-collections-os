@@ -21,9 +21,7 @@ const isFastAdminRoute = path === '/admin/review' || path === '/admin/products';
 const isFastUploadRoute = path === '/admin/upload';
 
 document.documentElement.dataset.appRoute = isAdminRoute ? 'admin' : 'catalogue';
-document.title = isAdminRoute ? 'Luxe Horizon Admin' : 'Luxe Horizon';
-const favicon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
-if (favicon) favicon.href = `/favicon.svg?v=official-10${isAdminRoute ? '-admin' : '-catalogue'}`;
+document.title = isAdminRoute ? 'THE BRAND STORE — Admin' : 'THE BRAND STORE — LUXURY LIVES HERE.';
 
 createRoot(document.getElementById('root')!, {
   onCaughtError: (error, errorInfo) => {

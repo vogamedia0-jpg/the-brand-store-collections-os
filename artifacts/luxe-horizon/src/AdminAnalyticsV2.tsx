@@ -8,7 +8,8 @@ type City = { countryCode: string | null; country: string; city: string; visitor
 type Recent = { createdAt: string; eventType: string; ref: string; path: string; countryCode: string | null; country: string; city: string | null; productId: string | null; durationSeconds: number | null; scrollDepth: number | null };
 type Analytics = { periodDays: number; totalVisits: number; uniqueVisitors: number; todayVisits: number; browsedVisitors: number; engagedVisitors: number; bouncedVisitors: number; productViews: number; whatsappClicks: number; whatsappVisitors: number; avgEngagementSeconds: number; countries: Country[]; cities: City[]; refs: { ref: string; count: number }[]; recent: Recent[] };
 
-const logo = '/assets/logo.png';
+import { brandAssets } from '@/lib/brand';
+const logo = brandAssets.logo;
 const eventLabel: Record<string, string> = { site_visit: 'Opened catalogue', product_view: 'Viewed product', product_click: 'Opened product', whatsapp_click: 'Clicked WhatsApp', engaged_visit: 'Stayed engaged', scroll_depth: 'Scrolled', session_end: 'Left catalogue' };
 function formatDate(value: string) { return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(value)); }
 function formatDuration(seconds: number) { if (!seconds) return '—'; if (seconds < 60) return `${seconds}s`; return `${Math.floor(seconds / 60)}m ${seconds % 60}s`; }
@@ -19,10 +20,10 @@ function Shell({ children }: { children: React.ReactNode }) {
   const nav = [['/admin/dashboard','Overview'],['/admin/upload','Upload'],['/admin/review','Review'],['/admin/products','Products'],['/admin/collections','Collections'],['/admin/catalogue','Publish & Share'],['/admin/analytics','Analytics'],['/admin/settings','Settings']];
   return <div className="min-h-[100dvh] bg-[var(--lh-ivory)] text-[var(--lh-ink)]">
     <aside className={`fixed inset-y-0 left-0 z-50 w-[264px] bg-[var(--lh-burgundy)] px-5 py-6 text-[var(--lh-ivory-light)] transition-transform lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}>
-      <div className="flex items-center justify-between"><div className="rounded-xl bg-[var(--lh-ivory-light)] p-2"><img src={logo} alt="Luxe Horizon" className="h-8 w-auto" /></div><button onClick={() => setOpen(false)} className="lg:hidden"><X size={20} /></button></div>
+      <div className="flex items-center justify-between"><div className="rounded-xl bg-[var(--lh-ivory-light)] p-2"><img src={logo} alt="THE BRAND STORE" className="h-8 w-auto" /></div><button onClick={() => setOpen(false)} className="lg:hidden"><X size={20} /></button></div>
       <nav className="mt-8 space-y-1">{nav.map(([href, label]) => <Link key={href} href={href} onClick={() => setOpen(false)} className={`block rounded-xl px-3 py-3 text-sm ${location === href ? 'bg-white/10 text-[var(--lh-champagne)]' : 'text-white/75 hover:bg-white/5 hover:text-white'}`}>{label}</Link>)}</nav>
     </aside>
-    <div className="lg:pl-[264px]"><header className="sticky top-0 z-40 flex h-[66px] items-center justify-between border-b border-[var(--lh-border)] bg-[color:var(--lh-ivory)]/95 px-5 backdrop-blur sm:px-8"><button onClick={() => setOpen(true)} className="lg:hidden"><Menu size={21} /></button><span className="hidden text-[10px] font-semibold uppercase tracking-[.18em] text-[var(--lh-muted-ink)] lg:block">Luxe Horizon Collection OS</span><Link href="/catalogue" className="text-xs font-semibold text-[var(--lh-burgundy)]">View catalogue</Link></header>{children}</div>
+    <div className="lg:pl-[264px]"><header className="sticky top-0 z-40 flex h-[66px] items-center justify-between border-b border-[var(--lh-border)] bg-[color:var(--lh-ivory)]/95 px-5 backdrop-blur sm:px-8"><button onClick={() => setOpen(true)} className="lg:hidden"><Menu size={21} /></button><span className="hidden text-[10px] font-semibold uppercase tracking-[.18em] text-[var(--lh-muted-ink)] lg:block">THE BRAND STORE Collection OS</span><Link href="/catalogue" className="text-xs font-semibold text-[var(--lh-burgundy)]">View catalogue</Link></header>{children}</div>
   </div>;
 }
 

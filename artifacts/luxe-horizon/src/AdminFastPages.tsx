@@ -3,7 +3,8 @@ import { BarChart3, CheckCircle2, Eye, FolderOpen, Globe2, LayoutDashboard, Load
 import { Link, useLocation } from 'wouter';
 import { supabase } from '@/lib/supabase';
 
-const logo = '/assets/logo.png';
+import { brandAssets } from '@/lib/brand';
+const logo = brandAssets.logo;
 const brandSuggestions = [
   'Rolex','Omega','Cartier','Patek Philippe','Audemars Piguet','Richard Mille','Hublot','Breitling','TAG Heuer',
   'Vacheron Constantin','Jaeger-LeCoultre','IWC','Panerai','Chanel','Hermès','Louis Vuitton','Dior','Gucci','Prada',
@@ -36,7 +37,7 @@ async function request<T>(path:string, token:string, init:RequestInit={}) {
   return response.json() as Promise<T>;
 }
 
-function imageFor(product:Product) { return product.images.find((i)=>i.isPrimary)?.imagePath || product.images[0]?.imagePath || '/assets/brand-board.png'; }
+function imageFor(product:Product) { return product.images.find((i)=>i.isPrimary)?.imagePath || product.images[0]?.imagePath || brandAssets.monogram; }
 function formatDate(value:string) { return new Intl.DateTimeFormat('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}).format(new Date(value)); }
 
 function FastShell({ children, reviewCount=0 }:{ children:React.ReactNode; reviewCount?:number }) {
@@ -47,10 +48,10 @@ function FastShell({ children, reviewCount=0 }:{ children:React.ReactNode; revie
   ] as const;
   return <div className="min-h-[100dvh] bg-[var(--lh-ivory)] text-[var(--lh-ink)]">
     <aside className={`fixed inset-y-0 left-0 z-50 w-[264px] bg-[var(--lh-burgundy)] px-5 py-6 text-[var(--lh-ivory-light)] transition-transform lg:translate-x-0 ${open?'translate-x-0':'-translate-x-full'}`}>
-      <div className="flex items-center justify-between"><div className="rounded-xl bg-[var(--lh-ivory-light)] p-2"><img src={logo} alt="Luxe Horizon" className="h-8 w-auto" /></div><button onClick={()=>setOpen(false)} className="lg:hidden"><X size={20}/></button></div>
+      <div className="flex items-center justify-between"><div className="rounded-xl bg-[var(--lh-ivory-light)] p-2"><img src={logo} alt="THE BRAND STORE" className="h-8 w-auto" /></div><button onClick={()=>setOpen(false)} className="lg:hidden"><X size={20}/></button></div>
       <nav className="mt-8 space-y-1">{nav.map(([href,label,Icon])=><Link key={href} href={href} onClick={()=>setOpen(false)} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm ${location===href?'bg-white/10 text-[var(--lh-champagne)]':'text-white/75 hover:bg-white/5 hover:text-white'}`}><Icon size={17}/><span>{label}</span>{label==='Review'&&reviewCount>0&&<span className="ml-auto rounded-full bg-[var(--lh-champagne)] px-2 py-0.5 text-[10px] font-bold text-[var(--lh-burgundy)]">{reviewCount}</span>}</Link>)}</nav>
     </aside>
-    <div className="lg:pl-[264px]"><header className="sticky top-0 z-40 flex h-[66px] items-center justify-between border-b border-[var(--lh-border)] bg-[color:var(--lh-ivory)]/95 px-5 backdrop-blur sm:px-8"><button onClick={()=>setOpen(true)} className="lg:hidden"><Menu size={21}/></button><span className="hidden text-[10px] font-semibold uppercase tracking-[.18em] text-[var(--lh-muted-ink)] lg:block">Luxe Horizon Collection OS</span><Link href="/catalogue" className="text-xs font-semibold text-[var(--lh-burgundy)]">View catalogue</Link></header>{children}</div>
+    <div className="lg:pl-[264px]"><header className="sticky top-0 z-40 flex h-[66px] items-center justify-between border-b border-[var(--lh-border)] bg-[color:var(--lh-ivory)]/95 px-5 backdrop-blur sm:px-8"><button onClick={()=>setOpen(true)} className="lg:hidden"><Menu size={21}/></button><span className="hidden text-[10px] font-semibold uppercase tracking-[.18em] text-[var(--lh-muted-ink)] lg:block">THE BRAND STORE Collection OS</span><Link href="/catalogue" className="text-xs font-semibold text-[var(--lh-burgundy)]">View catalogue</Link></header>{children}</div>
   </div>;
 }
 
@@ -60,7 +61,7 @@ function AnalyticsPage({token}:{token:string}) {
   useEffect(()=>{void load();},[token]);
   if(loading)return <main className="mx-auto max-w-[1280px] px-5 py-10"><Loader2 className="animate-spin text-[var(--lh-burgundy)]"/></main>;
   return <FastShell><main className="mx-auto max-w-[1280px] px-5 py-8 sm:px-8 lg:py-10">
-    <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="lh-label">Audience</p><h1 className="mt-2 font-display text-4xl sm:text-5xl">Analytics</h1><p className="mt-2 max-w-xl text-sm text-[var(--lh-muted-ink)]">See how many visitors opened the public Luxe Horizon catalogue. Data shown for the last {data?.periodDays || 30} days.</p></div><button onClick={load} className="lh-secondary-action rounded-full px-4 py-2.5 text-xs font-semibold">Refresh</button></div>
+    <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="lh-label">Audience</p><h1 className="mt-2 font-display text-4xl sm:text-5xl">Analytics</h1><p className="mt-2 max-w-xl text-sm text-[var(--lh-muted-ink)]">See how many visitors opened the public THE BRAND STORE catalogue. Data shown for the last {data?.periodDays || 30} days.</p></div><button onClick={load} className="lh-secondary-action rounded-full px-4 py-2.5 text-xs font-semibold">Refresh</button></div>
     {error&&<div className="mb-4 rounded-xl border border-[var(--lh-border)] bg-[var(--lh-ivory-light)] px-4 py-3 text-xs text-[var(--lh-muted-ink)]">{error}</div>}
     <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
       <div className="rounded-2xl border border-[var(--lh-burgundy)] bg-[var(--lh-burgundy)] p-5 text-[var(--lh-ivory-light)]"><Users size={18} className="text-[var(--lh-champagne)]"/><p className="mt-5 text-[9px] font-semibold uppercase tracking-[.16em] text-white/55">Unique visitors</p><p className="mt-2 font-display text-4xl">{data?.uniqueVisitors||0}</p><p className="mt-2 text-xs text-white/50">Approx. unique browsers/devices</p></div>

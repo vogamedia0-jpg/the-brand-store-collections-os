@@ -34,8 +34,10 @@ type CatalogueResponse = {
   availableBrands: string[];
 };
 
-const logo = '/assets/logo.png';
-const heroImage = '/assets/hero.png';
+import { brandAssets } from '@/lib/brand';
+
+const logo = brandAssets.logo;
+const heroImage = brandAssets.monogram;
 const whatsappFallback = '971559020956';
 
 const categoryLabels: Record<string, string> = {
@@ -81,12 +83,12 @@ function productUrl(productId: string) {
 
 function BrandHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--lh-border)] bg-[rgba(233,223,210,.96)] backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-[var(--tb-gold)] bg-[var(--tb-navy)]">
       <div className="mx-auto flex h-[72px] max-w-[1320px] items-center justify-between px-5 sm:h-[78px] sm:px-8 lg:px-10">
-        <a href="/" aria-label="Luxe Horizon catalogue">
-          <img src={logo} alt="Luxe Horizon" className="h-11 w-auto object-contain sm:h-12" />
+        <a href="/" aria-label="THE BRAND STORE catalogue">
+          <img src={brandAssets.logoLight} alt="THE BRAND STORE — LUXURY LIVES HERE." className="h-auto w-[210px] max-w-full object-contain sm:w-[240px]" />
         </a>
-        <span className="hidden text-[9px] font-semibold uppercase tracking-[.22em] text-[var(--lh-burgundy)] sm:block">Catalogue</span>
+        <span className="hidden text-[9px] font-semibold uppercase tracking-[.22em] text-[var(--tb-ivory)] sm:block">Catalogue</span>
       </div>
     </header>
   );
@@ -95,7 +97,9 @@ function BrandHeader() {
 function EmptyState({ error }: { error?: string }) {
   return (
     <div className="mx-auto flex min-h-[46vh] max-w-lg flex-col items-center justify-center px-6 text-center">
-      <img src={logo} alt="Luxe Horizon" className="h-12 w-auto" />
+      <img src={brandAssets.mark} alt="THE BRAND STORE" className="size-20 object-contain" />
+      <p className="mt-4 text-xs font-semibold tracking-[.18em] text-[var(--lh-ink)]">THE BRAND STORE</p>
+      <p className="mt-2 text-[10px] tracking-[.2em] text-[var(--lh-muted-ink)]">LUXURY LIVES HERE.</p>
       <h2 className="mt-7 font-display text-3xl text-[var(--lh-ink)]">No collection is published yet.</h2>
       <p className="mt-3 text-sm leading-6 text-[var(--lh-muted-ink)]">
         {error || 'The catalogue will appear here as soon as a collection is published.'}
@@ -197,13 +201,12 @@ function CatalogueList() {
     <main>
       <section className="mx-auto max-w-[1320px] px-5 pb-7 pt-6 sm:px-8 sm:pb-10 sm:pt-9 lg:px-10">
         <div className="relative overflow-hidden rounded-[18px] bg-[var(--lh-burgundy)] shadow-[0_20px_65px_rgba(57,8,15,.16)] sm:rounded-[22px]">
-          <img src={heroImage} alt="Luxe Horizon New Collection" className="h-[470px] w-full object-cover sm:h-[500px] lg:h-[550px]" />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(39,5,9,.88)_0%,rgba(39,5,9,.70)_32%,rgba(39,5,9,.12)_68%,rgba(39,5,9,.03)_100%)]" />
+          <img src={heroImage} alt="" className="ml-auto h-[470px] w-full object-contain p-14 sm:h-[500px] sm:w-1/2 lg:h-[550px]" />
           <div className="absolute inset-0 flex items-end p-7 text-[var(--lh-ivory-light)] sm:items-center sm:p-10 lg:p-14">
             <div className="max-w-[520px]">
               {publishedDate && <p className="text-[10px] font-semibold uppercase tracking-[.24em] text-[var(--lh-champagne)]">UPDATED · {publishedDate}</p>}
               <h1 className="mt-4 font-display text-[48px] leading-[.98] tracking-[-.035em] sm:text-6xl lg:text-7xl">New<br />Collection</h1>
-              <p className="mt-5 max-w-sm text-[13px] leading-6 text-[rgba(244,237,228,.80)]">A live catalogue of our latest arrivals, Updated every few days.</p>
+              <p className="mt-5 max-w-sm text-[13px] leading-6 text-[rgba(244,237,228,.80)]">LUXURY LIVES HERE.</p>
               <a href="#latest-arrivals" className="mt-7 inline-flex h-11 items-center rounded-full bg-[var(--lh-ivory-light)] px-5 text-[11px] font-semibold uppercase tracking-[.10em] text-[var(--lh-burgundy)]">Explore Collection</a>
             </div>
           </div>
@@ -211,7 +214,7 @@ function CatalogueList() {
       </section>
 
       <section className="mx-auto max-w-[1320px] px-5 pb-20 sm:px-8 lg:px-10">
-        <div className="sticky top-[72px] z-30 -mx-5 border-y border-[var(--lh-border)] bg-[rgba(233,223,210,.97)] px-5 py-3 backdrop-blur-xl sm:top-[78px] sm:mx-0 sm:rounded-2xl sm:border sm:px-3">
+        <div className="sticky top-[72px] z-30 -mx-5 border-y border-[var(--lh-border)] bg-[var(--lh-ivory)] px-5 py-3 backdrop-blur-xl sm:top-[78px] sm:mx-0 sm:rounded-2xl sm:border sm:px-3">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <div className="flex shrink-0 rounded-full border border-[var(--lh-border)] bg-[var(--lh-ivory-deep)] p-1">
               {(['all', 'women', 'men'] as const).map((value) => (
@@ -247,10 +250,10 @@ function CatalogueList() {
             {visible.map((product) => (
               <a key={product.id} href={productUrl(product.id)} className="group block min-w-0">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[12px] bg-[var(--lh-ivory-deep)] sm:rounded-[14px]">
-                  <img src={imageFor(product)} alt={product.brand || categoryLabels[product.category] || 'Luxe Horizon product'} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.025]" loading="lazy" />
+                  <img src={imageFor(product)} alt={product.brand || categoryLabels[product.category] || 'THE BRAND STORE product'} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.025]" loading="lazy" />
                 </div>
                 <div className="px-0.5 pt-3">
-                  <p className="truncate text-[13px] font-semibold text-[var(--lh-ink)] sm:text-[14px]">{product.brand || 'Luxe Horizon'}</p>
+                  <p className="truncate text-[13px] font-semibold text-[var(--lh-ink)] sm:text-[14px]">{product.brand || 'THE BRAND STORE'}</p>
                   <p className="mt-1 text-[10px] uppercase tracking-[.12em] text-[var(--lh-muted-ink)]">{categoryLabels[product.category] || product.category}</p>
                 </div>
               </a>
@@ -289,10 +292,10 @@ function ProductDetail({ productId }: { productId: string }) {
 
   const images = product.images?.length ? [...product.images].sort((a, b) => a.sortOrder - b.sortOrder) : [{ id: 'fallback', imagePath: heroImage, isPrimary: true, sortOrder: 0 }];
   const whatsappNumber = (import.meta.env.VITE_LUXE_HORIZON_WHATSAPP || whatsappFallback).replace(/\D/g, '');
-  const publicUrl = `https://luxehorizon.store${productUrl(product.id)}`;
-  const brandText = product.brand || 'Luxe Horizon item';
+  const publicUrl = `${window.location.origin}${productUrl(product.id)}`;
+  const brandText = product.brand || 'THE BRAND STORE item';
   const categoryText = categoryLabels[product.category] || product.category || 'Product';
-  const message = `Hi Luxe Horizon, I'm interested in this item.\n\nBrand: ${brandText}\nCategory: ${categoryText}\nProduct link: ${publicUrl}\n\nPlease send me availability and details.`;
+  const message = `Hi THE BRAND STORE, I'm interested in this item.\n\nBrand: ${brandText}\nCategory: ${categoryText}\nProduct link: ${publicUrl}\n\nPlease send me availability and details.`;
   const whatsappHref = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
   return (
@@ -336,7 +339,7 @@ export default function PublicCatalogue() {
       <BrandHeader />
       {productMatch ? <ProductDetail productId={decodeURIComponent(productMatch[1])} /> : <CatalogueList />}
       <footer className="border-t border-[var(--lh-border)] px-5 py-10 text-center">
-        <img src={logo} alt="Luxe Horizon" className="mx-auto h-11 w-auto object-contain" />
+        <img src={logo} alt="THE BRAND STORE" className="mx-auto h-11 w-auto object-contain" />
       </footer>
     </div>
   );

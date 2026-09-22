@@ -7,7 +7,9 @@ import { Link, Route, Switch, useLocation } from 'wouter';
 import { isSupabaseConfigured, supabase } from '@/lib/supabase';
 import { generateBrandedCataloguePdf } from '@/lib/pdf';
 
-const logo = '/assets/logo.png';
+import { brandAssets } from '@/lib/brand';
+
+const logo = brandAssets.logo;
 const bucket = 'product-images';
 const brandSuggestions = [
   'Rolex', 'Hermès', 'Chanel', 'Louis Vuitton', 'Cartier', 'Saint Laurent', 'Prada', 'Gucci',
@@ -47,7 +49,7 @@ type SessionState = { ready: boolean; token: string | null };
 const formatDate = (value?: string | null) => value
   ? new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(value))
   : '—';
-const imageFor = (product: Product) => product.images.find((image) => image.isPrimary)?.imagePath || product.images[0]?.imagePath || '/assets/brand-board.png';
+const imageFor = (product: Product) => product.images.find((image) => image.isPrimary)?.imagePath || product.images[0]?.imagePath || brandAssets.monogram;
 
 async function api<T>(path: string, token: string, init: RequestInit = {}): Promise<T> {
   const response = await fetch(`/api${path}`, {
@@ -60,7 +62,7 @@ async function api<T>(path: string, token: string, init: RequestInit = {}): Prom
 }
 
 function Logo({ light = false }: { light?: boolean }) {
-  return <img src={logo} alt="Luxe Horizon" className={`h-9 w-auto object-contain ${light ? 'brightness-0 invert opacity-95' : ''}`} />;
+  return <img src={light ? brandAssets.logoLight : logo} alt="THE BRAND STORE — LUXURY LIVES HERE." className="tb-logo h-auto w-[190px] max-w-full object-contain" />;
 }
 
 function Login() {
@@ -125,7 +127,7 @@ function ResetPassword() {
       <Logo light />
       <p className="mt-10 lh-label !text-[var(--lh-champagne)]">Secure recovery</p>
       <h1 className="mt-3 font-display text-4xl tracking-[-.03em]">Set new password</h1>
-      <p className="mt-2 text-sm text-white/55">Choose a new password for Luxe Horizon Admin.</p>
+      <p className="mt-2 text-sm text-white/55">Choose a new password for THE BRAND STORE Admin.</p>
       <label className="mt-8 block text-xs font-semibold">New password<input type="password" minLength={8} required value={password} onChange={(e) => setPassword(e.target.value)} className="mt-2 h-11 w-full rounded-lg border border-white/15 bg-black/10 px-3 text-sm outline-none focus:border-[var(--lh-champagne)]" /></label>
       <label className="mt-4 block text-xs font-semibold">Confirm password<input type="password" minLength={8} required value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="mt-2 h-11 w-full rounded-lg border border-white/15 bg-black/10 px-3 text-sm outline-none focus:border-[var(--lh-champagne)]" /></label>
       {error && <p className="mt-3 text-xs text-[#efb1a5]">{error}</p>}
@@ -169,9 +171,9 @@ function Shell({ children, reviewCount = 0, activeCollection }: { children: Reac
       </div>
     </aside>
     <div className="lg:pl-[264px]">
-      <header className="sticky top-0 z-30 flex h-[66px] items-center justify-between border-b border-[var(--lh-border)] bg-[rgba(243,238,230,.94)] px-5 backdrop-blur-xl sm:px-8">
+      <header className="sticky top-0 z-30 flex h-[66px] items-center justify-between border-b border-[var(--lh-border)] bg-[var(--lh-ivory)] px-5 backdrop-blur-xl sm:px-8">
         <button className="lg:hidden" onClick={() => setOpen(true)}><Menu size={20} /></button>
-        <div className="hidden font-mono-ui text-[9px] uppercase tracking-[.18em] text-[var(--lh-muted-ink)] lg:block">Luxe Horizon Collection OS</div>
+        <div className="hidden font-mono-ui text-[9px] uppercase tracking-[.18em] text-[var(--lh-muted-ink)] lg:block">THE BRAND STORE Collection OS</div>
         <Link href="/catalogue" className="text-xs font-semibold text-[var(--lh-burgundy)]">View catalogue</Link>
       </header>
       <main>{children}</main>
@@ -296,18 +298,18 @@ function PublishPage({ token, dashboard }: { token: string; dashboard: Dashboard
     try {
       const products = await api<Product[]>('/products?published=true', token);
       const activeProducts = products.filter((p) => p.isPublished && p.isActive && (!dashboard?.collection?.id || p.collectionId === dashboard.collection.id));
-      const title = dashboard?.collection?.name || 'Luxe Horizon Catalogue';
-      await generateBrandedCataloguePdf(title, activeProducts, (path) => path || '/assets/brand-board.png');
+      const title = dashboard?.collection?.name || 'THE BRAND STORE Catalogue';
+      await generateBrandedCataloguePdf(title, activeProducts, (path) => path || brandAssets.monogram);
       setMessage('PDF generated.');
     } catch (error) { setMessage(error instanceof Error ? error.message : 'PDF generation failed.'); }
     setBusy(false);
   };
   return <Page><Intro eyebrow="Catalogue" title="Publish & Share" description="View the live catalogue, copy its link or generate a PDF of the currently published collection." />
-    <section className="overflow-hidden rounded-2xl bg-[var(--lh-burgundy-deep)] text-[var(--lh-ivory-light)]"><div className="grid md:grid-cols-[1fr_.8fr]"><div className="p-7 sm:p-10"><p className="lh-label !text-[var(--lh-champagne)]">Public catalogue</p><h2 className="mt-4 font-display text-4xl">{dashboard?.collection?.name || 'No collection published'}</h2><p className="mt-3 text-sm text-white/55">{dashboard?.published || 0} products currently published.</p><div className="mt-7 flex flex-wrap gap-3"><Link href="/catalogue" className="rounded-full bg-[var(--lh-champagne)] px-5 py-3 text-xs font-semibold text-[var(--lh-burgundy-deep)]">View catalogue</Link><button onClick={copy} className="rounded-full border border-white/20 px-5 py-3 text-xs font-semibold">Copy link</button><button onClick={generatePdf} disabled={busy || !dashboard?.published} className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-3 text-xs font-semibold disabled:opacity-40">{busy ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />} Generate PDF</button></div>{message && <p className="mt-4 text-xs text-white/55">{message}</p>}</div><img src="/assets/brand-board.png" alt="Luxe Horizon brand materials" className="min-h-[260px] h-full w-full object-cover opacity-70" /></div></section>
+    <section className="overflow-hidden rounded-2xl bg-[var(--lh-burgundy-deep)] text-[var(--lh-ivory-light)]"><div className="grid md:grid-cols-[1fr_.8fr]"><div className="p-7 sm:p-10"><p className="lh-label !text-[var(--lh-champagne)]">Public catalogue</p><h2 className="mt-4 font-display text-4xl">{dashboard?.collection?.name || 'No collection published'}</h2><p className="mt-3 text-sm text-white/55">{dashboard?.published || 0} products currently published.</p><div className="mt-7 flex flex-wrap gap-3"><Link href="/catalogue" className="rounded-full bg-[var(--lh-champagne)] px-5 py-3 text-xs font-semibold text-[var(--lh-burgundy-deep)]">View catalogue</Link><button onClick={copy} className="rounded-full border border-white/20 px-5 py-3 text-xs font-semibold">Copy link</button><button onClick={generatePdf} disabled={busy || !dashboard?.published} className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-3 text-xs font-semibold disabled:opacity-40">{busy ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />} Generate PDF</button></div>{message && <p className="mt-4 text-xs text-white/55">{message}</p>}</div><img src="/assets/brand-board.png" alt="THE BRAND STORE brand materials" className="min-h-[260px] h-full w-full object-cover opacity-70" /></div></section>
   </Page>;
 }
 
-function SettingsPage() { return <Page><Intro eyebrow="Settings" title="Configuration" description="Account and deployment settings for Luxe Horizon." /><Panel className="p-6 sm:p-8"><p className="lh-label">Customer enquiries</p><h2 className="mt-2 font-display text-2xl">WhatsApp</h2><p className="mt-2 max-w-xl text-sm leading-6 text-[var(--lh-muted-ink)]">The customer enquiry number is configured through <strong>VITE_LUXE_HORIZON_WHATSAPP</strong>.</p><div className="mt-8 border-t border-[var(--lh-border)] pt-7"><p className="lh-label">Data & storage</p><h2 className="mt-2 font-display text-2xl">Supabase</h2><p className="mt-2 text-sm text-[var(--lh-muted-ink)]">Authentication, catalogue data and private product images use the existing Luxe Horizon Supabase project.</p></div></Panel></Page>; }
+function SettingsPage() { return <Page><Intro eyebrow="Settings" title="Configuration" description="Account and deployment settings for THE BRAND STORE." /><Panel className="p-6 sm:p-8"><p className="lh-label">Customer enquiries</p><h2 className="mt-2 font-display text-2xl">WhatsApp</h2><p className="mt-2 max-w-xl text-sm leading-6 text-[var(--lh-muted-ink)]">The customer enquiry number is configured through <strong>VITE_LUXE_HORIZON_WHATSAPP</strong>.</p><div className="mt-8 border-t border-[var(--lh-border)] pt-7"><p className="lh-label">Data & storage</p><h2 className="mt-2 font-display text-2xl">Supabase</h2><p className="mt-2 text-sm text-[var(--lh-muted-ink)]">Authentication, catalogue data and private product images use the existing THE BRAND STORE Supabase project.</p></div></Panel></Page>; }
 
 function AdminRoutes({ token }: { token: string }) {
   const [collections, setCollections] = useState<Collection[]>([]); const [dashboard, setDashboard] = useState<Dashboard | null>(null); const [version, setVersion] = useState(0);
