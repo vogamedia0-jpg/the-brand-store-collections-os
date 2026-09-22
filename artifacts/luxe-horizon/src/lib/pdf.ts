@@ -54,7 +54,7 @@ export async function generateBrandedCataloguePdf(
   doc.setFontSize(8);
   doc.text('Prepared for personal sharing through WhatsApp', 23, 270);
   doc.setTextColor(burgundy);
-  doc.text('LUXE HORIZON', 23, 278);
+  doc.text('THE BRAND STORE', 23, 278);
 
   for (let index = 0; index < products.length; index += 1) {
     const product = products[index];
@@ -79,7 +79,7 @@ export async function generateBrandedCataloguePdf(
     doc.setTextColor(burgundy);
     doc.setFont('times', 'normal');
     doc.setFontSize(16);
-    doc.text(product.brand || 'Luxe Horizon edit', x, 144);
+    doc.text(product.brand || 'The Brand Store edit', x, 144);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor('#806B61');
     doc.setFontSize(8);
@@ -88,6 +88,6 @@ export async function generateBrandedCataloguePdf(
     doc.line(x, 158, x + 38, 158);
   }
 
-  const safeName = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'luxe-horizon-catalogue';
+  const safeName = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'the-brand-store-catalogue';
   doc.save(`${safeName}.pdf`);
 }

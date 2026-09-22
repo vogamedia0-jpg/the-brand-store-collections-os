@@ -34,37 +34,37 @@
 }
 
 :root {
-  --background: 36 33% 95%;
-  --foreground: 20 16% 13%;
-  --border: 33 17% 83%;
-  --input: 33 17% 83%;
-  --ring: 346 53% 25%;
-  --card: 38 38% 97%;
-  --card-foreground: 20 16% 13%;
-  --card-border: 33 21% 86%;
-  --primary: 346 53% 25%;
-  --primary-foreground: 36 33% 95%;
-  --secondary: 31 25% 88%;
-  --secondary-foreground: 20 16% 13%;
-  --muted: 33 19% 90%;
-  --muted-foreground: 25 10% 45%;
-  --accent: 37 54% 72%;
-  --accent-foreground: 20 16% 13%;
+  --background: 44 43% 95%;
+  --foreground: 218 72% 15%;
+  --border: 36 25% 82%;
+  --input: 36 25% 82%;
+  --ring: 218 72% 15%;
+  --card: 44 43% 98%;
+  --card-foreground: 218 72% 15%;
+  --card-border: 36 25% 86%;
+  --primary: 218 72% 15%;
+  --primary-foreground: 44 43% 95%;
+  --secondary: 35 43% 85%;
+  --secondary-foreground: 218 72% 15%;
+  --muted: 35 25% 88%;
+  --muted-foreground: 35 8% 45%;
+  --accent: 38 48% 60%;
+  --accent-foreground: 218 72% 15%;
   --destructive: 0 62% 42%;
-  --destructive-foreground: 38 38% 97%;
-  --sidebar: 347 47% 20%;
-  --sidebar-foreground: 36 33% 95%;
-  --sidebar-border: 347 31% 31%;
-  --sidebar-primary: 37 54% 72%;
-  --sidebar-primary-foreground: 20 16% 13%;
-  --sidebar-accent: 347 37% 28%;
-  --sidebar-accent-foreground: 36 33% 95%;
+  --destructive-foreground: 44 43% 98%;
+  --sidebar: 218 72% 15%;
+  --sidebar-foreground: 44 43% 95%;
+  --sidebar-border: 218 45% 25%;
+  --sidebar-primary: 38 48% 60%;
+  --sidebar-primary-foreground: 218 72% 15%;
+  --sidebar-accent: 218 55% 22%;
+  --sidebar-accent-foreground: 44 43% 95%;
   --app-font-sans: 'DM Sans', sans-serif;
   --app-font-serif: 'Playfair Display', Georgia, serif;
   --app-font-mono: 'DM Mono', monospace;
-  --radius: 0.65rem;
-  --elevate-1: rgba(66, 25, 33, 0.04);
-  --elevate-2: rgba(66, 25, 33, 0.08);
+  --radius: 0.35rem;
+  --elevate-1: rgba(11, 31, 68, 0.04);
+  --elevate-2: rgba(11, 31, 68, 0.08);
 }
 
 .dark {
