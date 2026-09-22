@@ -34,31 +34,32 @@
 }
 
 :root {
-  --background: 44 43% 95%;
+  /* The Brand Store palette: navy, warm beige, soft gold, taupe, and ivory. */
+  --background: 43 47% 95%;
   --foreground: 218 72% 15%;
-  --border: 36 25% 82%;
-  --input: 36 25% 82%;
+  --border: 36 12% 76%;
+  --input: 36 12% 76%;
   --ring: 218 72% 15%;
-  --card: 44 43% 98%;
+  --card: 43 47% 98%;
   --card-foreground: 218 72% 15%;
-  --card-border: 36 25% 86%;
+  --card-border: 36 12% 82%;
   --primary: 218 72% 15%;
-  --primary-foreground: 44 43% 95%;
+  --primary-foreground: 43 47% 95%;
   --secondary: 35 43% 85%;
   --secondary-foreground: 218 72% 15%;
-  --muted: 35 25% 88%;
-  --muted-foreground: 35 8% 45%;
-  --accent: 38 48% 60%;
+  --muted: 36 12% 55%;
+  --muted-foreground: 36 12% 34%;
+  --accent: 39 48% 60%;
   --accent-foreground: 218 72% 15%;
   --destructive: 0 62% 42%;
-  --destructive-foreground: 44 43% 98%;
+  --destructive-foreground: 43 47% 98%;
   --sidebar: 218 72% 15%;
-  --sidebar-foreground: 44 43% 95%;
+  --sidebar-foreground: 43 47% 95%;
   --sidebar-border: 218 45% 25%;
-  --sidebar-primary: 38 48% 60%;
+  --sidebar-primary: 39 48% 60%;
   --sidebar-primary-foreground: 218 72% 15%;
   --sidebar-accent: 218 55% 22%;
-  --sidebar-accent-foreground: 44 43% 95%;
+  --sidebar-accent-foreground: 43 47% 95%;
   --app-font-sans: 'DM Sans', sans-serif;
   --app-font-serif: 'Playfair Display', Georgia, serif;
   --app-font-mono: 'DM Mono', monospace;
