@@ -111,7 +111,7 @@ const products: Product[] = [
     images: [
       {
         id: "image-marble-night",
-        imagePath: "Luxe_Horizon_in_Marble_Elegance_1788985336468.png",
+        imagePath: "brand-store-editorial-hero.png",
         isPrimary: true,
         sortOrder: 1,
       },
@@ -136,7 +136,7 @@ const products: Product[] = [
     images: [
       {
         id: "image-burgundy-box",
-        imagePath: "Luxe_Horizon_Luxury_Brand_Mockup_1788985388415.png",
+        imagePath: "brand-store-materials-board.png",
         isPrimary: true,
         sortOrder: 1,
       },
@@ -161,7 +161,7 @@ const products: Product[] = [
     images: [
       {
         id: "image-rose-timepiece",
-        imagePath: "Luxe_Horizon_Luxury_Brand_Mockup_1788985388415.png",
+        imagePath: "brand-store-materials-board.png",
         isPrimary: true,
         sortOrder: 1,
       },
@@ -171,8 +171,8 @@ const products: Product[] = [
 
 let settings = {
   whatsappNumber: "",
-  businessName: "Luxe horizon",
-  tagline: "The pinnacle of luxury shopping",
+  businessName: "The Brand Store",
+  tagline: "Luxury lives here",
 };
 
 const router: IRouter = Router();

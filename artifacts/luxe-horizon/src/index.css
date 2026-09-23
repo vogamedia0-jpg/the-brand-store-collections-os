@@ -34,64 +34,71 @@
 }
 
 :root {
-  --background: 36 33% 95%;
-  --foreground: 20 16% 13%;
-  --border: 33 17% 83%;
-  --input: 33 17% 83%;
-  --ring: 346 53% 25%;
-  --card: 38 38% 97%;
-  --card-foreground: 20 16% 13%;
-  --card-border: 33 21% 86%;
-  --primary: 346 53% 25%;
-  --primary-foreground: 36 33% 95%;
-  --secondary: 31 25% 88%;
-  --secondary-foreground: 20 16% 13%;
-  --muted: 33 19% 90%;
-  --muted-foreground: 25 10% 45%;
-  --accent: 37 54% 72%;
-  --accent-foreground: 20 16% 13%;
+  /* THE BRAND STORE palette: navy #0B1F44, beige #EADCC6, gold #C9A96A, taupe #9A8F7F, ivory #F8F5ED */
+  --brand-navy: 219 72% 16%;
+  --brand-beige: 37 46% 85%;
+  --brand-gold: 40 47% 60%;
+  --brand-taupe: 36 12% 55%;
+  --brand-ivory: 44 45% 95%;
+
+  --background: var(--brand-ivory);
+  --foreground: var(--brand-navy);
+  --border: 36 20% 84%;
+  --input: 36 20% 84%;
+  --ring: var(--brand-navy);
+  --card: 44 50% 97%;
+  --card-foreground: var(--brand-navy);
+  --card-border: 36 18% 88%;
+  --primary: var(--brand-navy);
+  --primary-foreground: var(--brand-ivory);
+  --secondary: var(--brand-beige);
+  --secondary-foreground: var(--brand-navy);
+  --muted: 37 30% 92%;
+  --muted-foreground: 36 12% 42%;
+  --accent: var(--brand-gold);
+  --accent-foreground: var(--brand-navy);
   --destructive: 0 62% 42%;
-  --destructive-foreground: 38 38% 97%;
-  --sidebar: 347 47% 20%;
-  --sidebar-foreground: 36 33% 95%;
-  --sidebar-border: 347 31% 31%;
-  --sidebar-primary: 37 54% 72%;
-  --sidebar-primary-foreground: 20 16% 13%;
-  --sidebar-accent: 347 37% 28%;
-  --sidebar-accent-foreground: 36 33% 95%;
+  --destructive-foreground: var(--brand-ivory);
+  --sidebar: var(--brand-navy);
+  --sidebar-foreground: var(--brand-ivory);
+  --sidebar-border: 219 40% 28%;
+  --sidebar-primary: var(--brand-gold);
+  --sidebar-primary-foreground: var(--brand-navy);
+  --sidebar-accent: 219 35% 24%;
+  --sidebar-accent-foreground: var(--brand-ivory);
   --app-font-sans: 'DM Sans', sans-serif;
   --app-font-serif: 'Playfair Display', Georgia, serif;
   --app-font-mono: 'DM Mono', monospace;
   --radius: 0.65rem;
-  --elevate-1: rgba(66, 25, 33, 0.04);
-  --elevate-2: rgba(66, 25, 33, 0.08);
+  --elevate-1: rgba(11, 31, 68, 0.04);
+  --elevate-2: rgba(11, 31, 68, 0.08);
 }
 
 .dark {
-  --background: 20 16% 13%;
-  --foreground: 36 33% 95%;
-  --border: 25 12% 29%;
-  --input: 25 12% 29%;
-  --card: 24 15% 17%;
-  --card-foreground: 36 33% 95%;
-  --card-border: 25 12% 29%;
-  --primary: 37 54% 72%;
-  --primary-foreground: 20 16% 13%;
-  --secondary: 25 12% 26%;
-  --secondary-foreground: 36 33% 95%;
-  --muted: 25 12% 23%;
-  --muted-foreground: 33 13% 70%;
-  --accent: 346 53% 35%;
-  --accent-foreground: 36 33% 95%;
+  --background: 219 40% 10%;
+  --foreground: var(--brand-ivory);
+  --border: 219 20% 24%;
+  --input: 219 20% 24%;
+  --card: 219 35% 14%;
+  --card-foreground: var(--brand-ivory);
+  --card-border: 219 20% 24%;
+  --primary: var(--brand-gold);
+  --primary-foreground: var(--brand-navy);
+  --secondary: 219 20% 22%;
+  --secondary-foreground: var(--brand-ivory);
+  --muted: 219 20% 19%;
+  --muted-foreground: 36 15% 70%;
+  --accent: var(--brand-gold);
+  --accent-foreground: var(--brand-navy);
   --destructive: 0 62% 48%;
-  --destructive-foreground: 36 33% 95%;
-  --sidebar: 20 16% 10%;
-  --sidebar-foreground: 36 33% 95%;
-  --sidebar-border: 25 12% 25%;
-  --sidebar-primary: 37 54% 72%;
-  --sidebar-primary-foreground: 20 16% 13%;
-  --sidebar-accent: 25 12% 22%;
-  --sidebar-accent-foreground: 36 33% 95%;
+  --destructive-foreground: var(--brand-ivory);
+  --sidebar: 219 45% 8%;
+  --sidebar-foreground: var(--brand-ivory);
+  --sidebar-border: 219 20% 20%;
+  --sidebar-primary: var(--brand-gold);
+  --sidebar-primary-foreground: var(--brand-navy);
+  --sidebar-accent: 219 20% 18%;
+  --sidebar-accent-foreground: var(--brand-ivory);
 }
 
 @layer base {

@@ -1,10 +1,10 @@
 import { Router, type IRouter } from "express";
 import healthRouter from "./health";
-import luxeHorizonRouter from "./luxe-horizon";
+import brandStoreRouter from "./brand-store";
 
 const router: IRouter = Router();
 
 router.use(healthRouter);
-router.use(luxeHorizonRouter);
+router.use(brandStoreRouter);
 
 export default router;
