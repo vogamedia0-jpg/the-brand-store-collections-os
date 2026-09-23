@@ -20,10 +20,25 @@ import {
 type Gender = "men" | "women" | "unknown";
 type Category =
   | "clothing"
-  | "footwear"
-  | "watches"
+  | "dresses"
+  | "coats-jackets"
+  | "knitwear"
+  | "tops"
+  | "trousers"
+  | "skirts"
+  | "suits"
+  | "shirts"
   | "bags"
+  | "handbags"
+  | "leather-goods"
+  | "shoes"
+  | "footwear"
   | "accessories"
+  | "jewellery"
+  | "fine-jewellery"
+  | "watches"
+  | "travel"
+  | "gifts"
   | "other";
 
 type Collection = {
@@ -111,7 +126,7 @@ const products: Product[] = [
     images: [
       {
         id: "image-marble-night",
-        imagePath: "brand-store-editorial-hero.png",
+        imagePath: "product-placeholder.png",
         isPrimary: true,
         sortOrder: 1,
       },
@@ -136,7 +151,7 @@ const products: Product[] = [
     images: [
       {
         id: "image-burgundy-box",
-        imagePath: "brand-store-materials-board.png",
+        imagePath: "product-placeholder.png",
         isPrimary: true,
         sortOrder: 1,
       },
@@ -161,7 +176,7 @@ const products: Product[] = [
     images: [
       {
         id: "image-rose-timepiece",
-        imagePath: "brand-store-materials-board.png",
+        imagePath: "product-placeholder.png",
         isPrimary: true,
         sortOrder: 1,
       },

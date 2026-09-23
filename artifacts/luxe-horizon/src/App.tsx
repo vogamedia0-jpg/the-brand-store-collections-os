@@ -5,8 +5,8 @@ import {
   Check, CheckCircle2, ChevronDown, ChevronRight, CloudUpload, Copy,
   ExternalLink, Eye, Filter, FolderOpen, Globe2, Heart,
   Image as ImageIcon, LayoutDashboard, ListFilter, Loader2, LockKeyhole,
-  Menu, MessageCircle, MoreHorizontal, Package, Pencil, Plus, Save,
-  Search, Send, Settings2, ShieldCheck, Sparkles, Trash2, UploadCloud, X, Zap
+  Menu, MessageCircle, MoreHorizontal, Moon, Package, Pencil, Plus, Save,
+  Search, Send, Settings2, ShieldCheck, Sparkles, Sun, TrendingUp, Trash2, UploadCloud, X, Zap
 } from 'lucide-react';
 import {
   useHealthCheck,
@@ -50,14 +50,20 @@ const logo = '/assets/logo-gold.png';
 const logoDark = '/assets/logo-light.png';
 const heroImage = '/assets/hero.png';
 const boardImage = '/assets/brand-board.png';
+const placeholderImage = '/assets/product-placeholder.png';
 const assetImageMap: Record<string, string> = {
-  'brand-store-editorial-hero.png': heroImage,
-  'brand-store-materials-board.png': boardImage,
+  'brand-store-editorial-hero.png': placeholderImage,
+  'brand-store-materials-board.png': placeholderImage,
+  'product-placeholder.png': placeholderImage,
 };
 
 type Product = {
   id: string; collectionId: string; gender: 'men' | 'women' | 'unknown';
-  category: 'clothing' | 'footwear' | 'watches' | 'bags' | 'accessories' | 'other';
+  category:
+    | 'clothing' | 'dresses' | 'coats-jackets' | 'knitwear' | 'tops' | 'trousers' | 'skirts'
+    | 'suits' | 'shirts'
+    | 'bags' | 'handbags' | 'leather-goods' | 'shoes' | 'footwear'
+    | 'accessories' | 'jewellery' | 'fine-jewellery' | 'watches' | 'travel' | 'gifts' | 'other';
   brand?: string | null; aiGender?: string | null; aiCategory?: string | null;
   aiBrand?: string | null; aiConfidence?: number | null; reviewed: boolean;
   isActive: boolean; isPublished: boolean; sortOrder: number; images: { id: string; imagePath: string; isPrimary: boolean; sortOrder: number }[];
@@ -70,12 +76,12 @@ const fallbackCollection: Collection = {
   publishedAt: '2026-08-14T10:00:00Z', createdAt: '2026-08-01T10:00:00Z', updatedAt: '2026-08-14T10:00:00Z',
 };
 const fallbackProducts: Product[] = [
-  { id: 'look-01', collectionId: fallbackCollection.id, gender: 'women', category: 'bags', brand: 'Bottega Veneta', aiGender: 'women', aiCategory: 'bags', aiBrand: 'Bottega Veneta', aiConfidence: .98, reviewed: true, isActive: true, isPublished: true, sortOrder: 1, images: [{ id: 'img-01', imagePath: heroImage, isPrimary: true, sortOrder: 1 }] },
-  { id: 'look-02', collectionId: fallbackCollection.id, gender: 'women', category: 'clothing', brand: 'The Row', aiGender: 'women', aiCategory: 'clothing', aiBrand: 'The Row', aiConfidence: .95, reviewed: true, isActive: true, isPublished: true, sortOrder: 2, images: [{ id: 'img-02', imagePath: boardImage, isPrimary: true, sortOrder: 1 }] },
-  { id: 'look-03', collectionId: fallbackCollection.id, gender: 'men', category: 'watches', brand: 'Cartier', aiGender: 'men', aiCategory: 'watches', aiBrand: 'Cartier', aiConfidence: .92, reviewed: true, isActive: true, isPublished: true, sortOrder: 3, images: [{ id: 'img-03', imagePath: heroImage, isPrimary: true, sortOrder: 1 }] },
-  { id: 'look-04', collectionId: fallbackCollection.id, gender: 'women', category: 'footwear', brand: 'Manolo Blahnik', aiGender: 'women', aiCategory: 'footwear', aiBrand: 'Manolo Blahnik', aiConfidence: .88, reviewed: false, isActive: true, isPublished: false, sortOrder: 4, images: [{ id: 'img-04', imagePath: boardImage, isPrimary: true, sortOrder: 1 }] },
-  { id: 'look-05', collectionId: fallbackCollection.id, gender: 'unknown', category: 'accessories', brand: null, aiGender: 'unknown', aiCategory: 'accessories', aiBrand: null, aiConfidence: .61, reviewed: false, isActive: true, isPublished: false, sortOrder: 5, images: [{ id: 'img-05', imagePath: heroImage, isPrimary: true, sortOrder: 1 }] },
-  { id: 'look-06', collectionId: fallbackCollection.id, gender: 'men', category: 'clothing', brand: 'Loro Piana', aiGender: 'men', aiCategory: 'clothing', aiBrand: 'Loro Piana', aiConfidence: .97, reviewed: true, isActive: true, isPublished: true, sortOrder: 6, images: [{ id: 'img-06', imagePath: boardImage, isPrimary: true, sortOrder: 1 }] },
+  { id: 'look-01', collectionId: fallbackCollection.id, gender: 'women', category: 'bags', brand: 'Bottega Veneta', aiGender: 'women', aiCategory: 'bags', aiBrand: 'Bottega Veneta', aiConfidence: .98, reviewed: true, isActive: true, isPublished: true, sortOrder: 1, images: [{ id: 'img-01', imagePath: placeholderImage, isPrimary: true, sortOrder: 1 }] },
+  { id: 'look-02', collectionId: fallbackCollection.id, gender: 'women', category: 'clothing', brand: 'The Row', aiGender: 'women', aiCategory: 'clothing', aiBrand: 'The Row', aiConfidence: .95, reviewed: true, isActive: true, isPublished: true, sortOrder: 2, images: [{ id: 'img-02', imagePath: placeholderImage, isPrimary: true, sortOrder: 1 }] },
+  { id: 'look-03', collectionId: fallbackCollection.id, gender: 'men', category: 'watches', brand: 'Cartier', aiGender: 'men', aiCategory: 'watches', aiBrand: 'Cartier', aiConfidence: .92, reviewed: true, isActive: true, isPublished: true, sortOrder: 3, images: [{ id: 'img-03', imagePath: placeholderImage, isPrimary: true, sortOrder: 1 }] },
+  { id: 'look-04', collectionId: fallbackCollection.id, gender: 'women', category: 'footwear', brand: 'Manolo Blahnik', aiGender: 'women', aiCategory: 'footwear', aiBrand: 'Manolo Blahnik', aiConfidence: .88, reviewed: false, isActive: true, isPublished: false, sortOrder: 4, images: [{ id: 'img-04', imagePath: placeholderImage, isPrimary: true, sortOrder: 1 }] },
+  { id: 'look-05', collectionId: fallbackCollection.id, gender: 'unknown', category: 'accessories', brand: null, aiGender: 'unknown', aiCategory: 'accessories', aiBrand: null, aiConfidence: .61, reviewed: false, isActive: true, isPublished: false, sortOrder: 5, images: [{ id: 'img-05', imagePath: placeholderImage, isPrimary: true, sortOrder: 1 }] },
+  { id: 'look-06', collectionId: fallbackCollection.id, gender: 'men', category: 'clothing', brand: 'Loro Piana', aiGender: 'men', aiCategory: 'clothing', aiBrand: 'Loro Piana', aiConfidence: .97, reviewed: true, isActive: true, isPublished: true, sortOrder: 6, images: [{ id: 'img-06', imagePath: placeholderImage, isPrimary: true, sortOrder: 1 }] },
 ];
 
 const navGroups = [
@@ -88,12 +94,26 @@ const navGroups = [
     { href: '/admin/products', label: 'Products', icon: Package },
     { href: '/admin/collections', label: 'Collections', icon: FolderOpen },
     { href: '/admin/catalogue', label: 'Publish & links', icon: Globe2 },
+    { href: '/admin/analytics', label: 'Analytics', icon: TrendingUp },
   ] },
 ];
-const categoryLabels: Record<string, string> = { clothing: 'Clothing', footwear: 'Footwear', watches: 'Watches', bags: 'Bags', accessories: 'Accessories', other: 'Other' };
+const CATEGORY_GROUPS: { label: string; options: [string, string][] }[] = [
+  { label: 'Women', options: [['clothing', 'Clothing'], ['dresses', 'Dresses'], ['coats-jackets', 'Coats & Jackets'], ['knitwear', 'Knitwear'], ['tops', 'Tops'], ['trousers', 'Trousers'], ['skirts', 'Skirts']] },
+  { label: 'Men', options: [['suits', 'Suits'], ['shirts', 'Shirts']] },
+  { label: 'Luxury', options: [['handbags', 'Handbags'], ['fine-jewellery', 'Fine Jewellery'], ['leather-goods', 'Leather Goods'], ['travel', 'Travel'], ['gifts', 'Gifts']] },
+  { label: 'Shared', options: [['bags', 'Bags'], ['shoes', 'Shoes'], ['footwear', 'Footwear'], ['accessories', 'Accessories'], ['jewellery', 'Jewellery'], ['watches', 'Watches'], ['other', 'Other']] },
+];
+const categoryLabels: Record<string, string> = Object.fromEntries(CATEGORY_GROUPS.flatMap((group) => group.options));
 const genderLabels: Record<string, string> = { men: 'Men', women: 'Women', unknown: 'Unsorted' };
+const BRAND_OPTIONS = [
+  'Alaïa', 'Alexander McQueen', 'Audemars Piguet', 'Balenciaga', 'Bottega Veneta', 'Brunello Cucinelli',
+  'Bulgari', 'Burberry', 'Cartier', 'Celine', 'Chanel', 'Chloé', 'Dior', 'Dolce & Gabbana', 'Fendi',
+  'Giorgio Armani', 'Givenchy', 'Gucci', 'Hermès', 'Jacquemus', 'Loewe', 'Loro Piana', 'Louis Vuitton',
+  'Maison Margiela', 'Moncler', 'Omega', 'Patek Philippe', 'Prada', 'Rolex', 'Saint Laurent',
+  'Tiffany & Co.', 'Tom Ford', 'The Row', 'Vacheron Constantin', 'Valentino', 'Van Cleef & Arpels', 'Versace',
+].sort();
 const formatDate = (value?: string | null) => value ? new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(value)) : 'Not set';
-const resolveImage = (path?: string | null) => !path ? heroImage : path.startsWith('/') ? path : assetImageMap[path] || heroImage;
+const resolveImage = (path?: string | null) => !path ? placeholderImage : path.startsWith('/') ? path : assetImageMap[path] || placeholderImage;
 const imageFor = (product: Product) => resolveImage(product.images?.find((image) => image.isPrimary)?.imagePath || product.images?.[0]?.imagePath);
 
 function AppLogo({ dark = false }: { dark?: boolean }) {
@@ -168,9 +188,26 @@ function Badge({ children, tone = 'neutral' }: { children: React.ReactNode; tone
   return <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[.13em] ${styles[tone]}`}>{children}</span>;
 }
 
+const ADMIN_THEME_KEY = 'brand-store-admin-theme';
+function useAdminTheme() {
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof window === 'undefined') return 'light';
+    const stored = window.localStorage.getItem(ADMIN_THEME_KEY);
+    if (stored === 'light' || stored === 'dark') return stored;
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    window.localStorage.setItem(ADMIN_THEME_KEY, theme);
+    return () => { document.documentElement.classList.remove('dark'); };
+  }, [theme]);
+  return [theme, setTheme] as const;
+}
+
 function AdminShell({ children }: { children: React.ReactNode }) {
   const [location, setLocation] = useLocation();
   const [open, setOpen] = useState(false);
+  const [theme, setTheme] = useAdminTheme();
   const { data: health } = useHealthCheck({ query: { queryKey: ['/api/healthz'] as const, staleTime: 30000 } });
   return <AuthenticatedAdmin><div className="min-h-[100dvh] bg-[hsl(var(--background))] noise">
     <aside className={`fixed inset-y-0 left-0 z-40 flex w-[272px] -translate-x-full flex-col bg-[hsl(var(--sidebar))] px-5 py-6 text-[hsl(var(--sidebar-foreground))] transition-transform duration-300 lg:translate-x-0 ${open ? 'translate-x-0' : ''}`}>
@@ -188,7 +225,7 @@ function AdminShell({ children }: { children: React.ReactNode }) {
     <div className="lg:pl-[272px]">
       <header className="sticky top-0 z-30 flex h-[72px] items-center justify-between border-b border-[hsl(var(--border))] bg-[hsl(var(--background))]/95 px-5 backdrop-blur-md sm:px-8">
         <div className="flex items-center gap-3"><button onClick={() => setOpen(true)} className="rounded-full p-2 lg:hidden" aria-label="Open navigation"><Menu size={21} /></button><div className="lg:hidden"><AppLogo /></div><div className="hidden items-center gap-2 text-xs text-[hsl(var(--muted-foreground))] lg:flex"><ShieldCheck size={15} className="text-[hsl(var(--primary))]" /> Private operations space</div></div>
-        <div className="flex items-center gap-2"><IconButton label="Notifications"><Bell size={17} /></IconButton><div className="ml-2 flex items-center gap-2 border-l border-[hsl(var(--border))] pl-3"><span className="flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--primary))] font-display text-sm text-[hsl(var(--primary-foreground))]">TB</span><span className="hidden text-xs font-semibold sm:block">Operations</span><ChevronDown size={14} className="hidden text-[hsl(var(--muted-foreground))] sm:block" /></div></div>
+        <div className="flex items-center gap-2"><IconButton label="Notifications"><Bell size={17} /></IconButton><button type="button" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} aria-label="Toggle dark mode" aria-pressed={theme === 'dark'} data-testid="button-toggle-theme" className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--card))] transition hover:-translate-y-0.5 hover:border-[hsl(var(--primary))] hover:text-[hsl(var(--primary))]">{theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}<span className="sr-only">Toggle dark mode</span></button><div className="ml-2 flex items-center gap-2 border-l border-[hsl(var(--border))] pl-3"><span className="flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--primary))] font-display text-sm text-[hsl(var(--primary-foreground))]">TB</span><span className="hidden text-xs font-semibold sm:block">Operations</span><ChevronDown size={14} className="hidden text-[hsl(var(--muted-foreground))] sm:block" /></div></div>
       </header>
       <main>{children}</main>
     </div>
@@ -287,7 +324,7 @@ function CatalogueAdminPage() {
   const [category, setCategory] = useState('all');
   const [brand, setBrand] = useState('all');
   const filtered = products.filter((product) => (gender === 'all' || product.gender === gender) && (category === 'all' || product.category === category) && (brand === 'all' || product.brand === brand));
-  const brands = [...new Set(products.flatMap((product) => product.brand ? [product.brand] : []))].sort();
+  const brands = [...new Set([...BRAND_OPTIONS, ...products.flatMap((product) => product.brand ? [product.brand] : [])])].sort();
   const copyLink = () => {
     const query = new URLSearchParams();
     if (gender !== 'all') query.set('gender', gender);
@@ -325,7 +362,7 @@ function CatalogueAdminPage() {
       <div className="mb-5 flex flex-wrap items-center gap-2">
         <span className="mr-2 text-xs font-semibold">Link view</span>
         {['all', 'women', 'men', 'unknown'].map((item) => <button type="button" key={item} onClick={() => setGender(item)} className={`rounded-full px-3 py-2 text-xs font-semibold capitalize ${gender === item ? 'bg-[hsl(var(--primary))] text-white' : 'bg-[hsl(var(--muted))]'}`} data-testid={`button-catalogue-filter-${item}`}>{item === 'all' ? 'All products' : genderLabels[item]}</button>)}
-        <select value={category} onChange={(event) => setCategory(event.target.value)} className="h-9 rounded-full border border-[hsl(var(--border))] bg-transparent px-3 text-xs" data-testid="select-admin-catalogue-category"><option value="all">All categories</option>{Object.entries(categoryLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>
+        <select value={category} onChange={(event) => setCategory(event.target.value)} className="h-9 rounded-full border border-[hsl(var(--border))] bg-transparent px-3 text-xs" data-testid="select-admin-catalogue-category"><option value="all">All categories</option>{CATEGORY_GROUPS.map((group) => <optgroup key={group.label} label={group.label}>{group.options.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</optgroup>)}</select>
         <select value={brand} onChange={(event) => setBrand(event.target.value)} className="h-9 max-w-[150px] rounded-full border border-[hsl(var(--border))] bg-transparent px-3 text-xs" data-testid="select-admin-catalogue-brand"><option value="all">All houses</option>{brands.map((item) => <option key={item} value={item}>{item}</option>)}</select>
       </div>
       <div className="overflow-hidden rounded-2xl border border-[hsl(var(--card-border))] bg-[hsl(var(--card))]">
@@ -354,9 +391,9 @@ function CataloguePage() {
   const [category, setCategory] = useState(sharedCategory);
   const [brand, setBrand] = useState(sharedBrand);
   const products = catalogue?.products?.length ? catalogue.products : fallbackProducts.filter((product) => product.isPublished);
-  const brands = catalogue?.availableBrands?.length ? catalogue.availableBrands : ['Bottega Veneta', 'The Row', 'Cartier', 'Loro Piana', 'Manolo Blahnik'];
+  const brands = catalogue?.availableBrands?.length ? catalogue.availableBrands : BRAND_OPTIONS;
   const visible = products.filter((product) => (gender === 'all' || product.gender === gender) && (category === 'all' || product.category === category) && (brand === 'all' || product.brand === brand));
-  return <div className="min-h-[100dvh] bg-[#f8f5ed] text-[#0b1f44] noise"><header className="sticky top-0 z-30 border-b border-[#eadcc6] bg-[#f8f5ed]/95 backdrop-blur-md"><div className="mx-auto flex h-[76px] max-w-[1380px] items-center justify-between px-5 sm:px-8"><Link href="/catalogue" data-testid="link-catalogue-home"><AppLogo /></Link><div className="hidden items-center gap-7 text-[11px] uppercase tracking-[.16em] md:flex"><a href="#collection" className="hover:text-[#0b1f44]">The collection</a><a href="#about" className="hover:text-[#0b1f44]">The house</a></div><IconButton label="Catalogue menu" className="md:hidden"><Menu size={18} /></IconButton></div></header><main><section className="relative mx-auto grid max-w-[1380px] overflow-hidden px-5 pb-10 pt-8 sm:px-8 sm:pt-12 lg:grid-cols-[.78fr_1.22fr] lg:gap-12 lg:pb-16 lg:pt-16"><div className="relative z-10 flex flex-col justify-center pb-9 lg:pb-0"><p className="font-mono-ui text-[10px] uppercase tracking-[.23em] text-[#9a8f7f]">THE BRAND STORE / {catalogue?.collection?.name || 'Autumn / Winter 2026'}</p><h1 className="mt-5 max-w-xl font-display text-5xl leading-[.98] tracking-[-.04em] sm:text-7xl">A private view of <em className="text-[#0b1f44]">what’s next.</em></h1><p className="mt-6 max-w-md text-sm leading-7 text-[#9a8f7f]">A considered edit of exceptional pieces, selected for the way they live together.</p><a href="#collection" className="mt-8 inline-flex w-fit items-center gap-2 border-b border-[#0b1f44] pb-2 text-xs font-semibold uppercase tracking-[.12em] text-[#0b1f44]">Enter the collection <ArrowDownToLine size={14} /></a></div><div className="relative min-h-[440px] overflow-hidden rounded-sm sm:min-h-[600px]"><img src={heroImage} alt="The Brand Store campaign" className="h-full w-full object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" /><div className="absolute bottom-5 left-5 flex items-center gap-3 text-[10px] uppercase tracking-[.15em] text-white/80"><span className="h-px w-8 bg-white/70" /> London / 2026</div></div></section><section id="collection" className="mx-auto max-w-[1380px] px-5 pb-20 sm:px-8"><div className="flex flex-col justify-between gap-5 border-t border-[#eadcc6] py-7 sm:flex-row sm:items-center"><div><p className="font-mono-ui text-[10px] uppercase tracking-[.2em] text-[#9a8f7f]">The edit</p><h2 className="mt-2 font-display text-3xl sm:text-4xl">Objects with a point of view.</h2></div><div className="flex flex-wrap gap-2"><select value={gender} onChange={(event) => setGender(event.target.value)} className="h-10 rounded-full border border-[#9a8f7f] bg-transparent px-3 text-xs outline-none" data-testid="select-catalogue-gender"><option value="all">Everyone</option><option value="women">Women</option><option value="men">Men</option></select><select value={category} onChange={(event) => setCategory(event.target.value)} className="h-10 rounded-full border border-[#9a8f7f] bg-transparent px-3 text-xs outline-none" data-testid="select-catalogue-category"><option value="all">All categories</option>{Object.entries(categoryLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select><select value={brand} onChange={(event) => setBrand(event.target.value)} className="h-10 max-w-[150px] rounded-full border border-[#9a8f7f] bg-transparent px-3 text-xs outline-none" data-testid="select-catalogue-brand"><option value="all">All houses</option>{brands.map((item) => <option key={item} value={item}>{item}</option>)}</select></div></div>{visible.length === 0 ? <div className="py-24 text-center"><Heart className="mx-auto text-[#0b1f44]" /><p className="mt-4 font-display text-2xl">A quieter edit is coming.</p><p className="mt-2 text-sm text-[#9a8f7f]">Try another filter.</p></div> : <div className="grid grid-cols-2 gap-x-3 gap-y-8 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-4">{visible.map((product) => <Link key={product.id} href={`/catalogue/product/${product.id}`} className="group block" data-testid={`link-public-product-${product.id}`}><div className="relative aspect-[.8] overflow-hidden bg-[#eadcc6]"><img src={imageFor(product)} alt={`${product.brand || 'The Brand Store'} ${categoryLabels[product.category]}`} className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]" /><span className="absolute bottom-3 left-3 font-mono-ui text-[9px] uppercase tracking-[.14em] text-white drop-shadow">{genderLabels[product.gender]}</span></div><div className="mt-3 flex items-start justify-between gap-2"><div><p className="font-display text-xl">{product.brand || 'House edit'}</p><p className="mt-1 text-[10px] uppercase tracking-[.14em] text-[#9a8f7f]">{categoryLabels[product.category]}</p></div><ArrowUpRight size={15} className="mt-1 text-[#9a8f7f] transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></div></Link>)}</div>}</section><section id="about" className="border-t border-[#eadcc6] bg-[#eadcc6]"><div className="mx-auto grid max-w-[1380px] gap-10 px-5 py-16 sm:px-8 md:grid-cols-[.8fr_1.2fr] md:py-24"><div><p className="font-mono-ui text-[10px] uppercase tracking-[.2em] text-[#9a8f7f]">The house</p><h2 className="mt-4 max-w-sm font-display text-4xl leading-tight sm:text-5xl">Luxury is in the edit.</h2></div><div className="max-w-xl"><p className="font-display text-2xl leading-relaxed text-[#0b1f44]">THE BRAND STORE is a private shopping house for people who know that the best things are rarely shouting.</p><p className="mt-6 text-sm leading-7 text-[#9a8f7f]">We bring together the pieces worth making room for: quietly distinctive, beautifully made, and chosen for a life beyond the season.</p></div></div></section></main><footer className="border-t border-[#eadcc6] bg-[#f8f5ed]"><div className="mx-auto flex max-w-[1380px] flex-col gap-4 px-5 py-7 text-[10px] uppercase tracking-[.14em] text-[#9a8f7f] sm:flex-row sm:items-center sm:justify-between sm:px-8"><span>© THE BRAND STORE</span><span>Luxury lives here</span></div></footer></div>;
+  return <div className="min-h-[100dvh] bg-[#f8f5ed] text-[#0b1f44] noise"><header className="sticky top-0 z-30 border-b border-[#eadcc6] bg-[#f8f5ed]/95 backdrop-blur-md"><div className="mx-auto flex h-[76px] max-w-[1380px] items-center justify-between px-5 sm:px-8"><Link href="/catalogue" data-testid="link-catalogue-home"><AppLogo /></Link><div className="hidden items-center gap-7 text-[11px] uppercase tracking-[.16em] md:flex"><a href="#collection" className="hover:text-[#0b1f44]">The collection</a><a href="#about" className="hover:text-[#0b1f44]">The house</a></div><IconButton label="Catalogue menu" className="md:hidden"><Menu size={18} /></IconButton></div></header><main><section className="relative mx-auto grid max-w-[1380px] overflow-hidden px-5 pb-10 pt-8 sm:px-8 sm:pt-12 lg:grid-cols-[.78fr_1.22fr] lg:gap-12 lg:pb-16 lg:pt-16"><div className="relative z-10 flex flex-col justify-center pb-9 lg:pb-0"><p className="font-mono-ui text-[10px] uppercase tracking-[.23em] text-[#9a8f7f]">THE BRAND STORE / {catalogue?.collection?.name || 'Autumn / Winter 2026'}</p><h1 className="mt-5 max-w-xl font-display text-5xl leading-[.98] tracking-[-.04em] sm:text-7xl">A private view of <em className="text-[#0b1f44]">what’s next.</em></h1><p className="mt-6 max-w-md text-sm leading-7 text-[#9a8f7f]">A considered edit of exceptional pieces, selected for the way they live together.</p><a href="#collection" className="mt-8 inline-flex w-fit items-center gap-2 border-b border-[#0b1f44] pb-2 text-xs font-semibold uppercase tracking-[.12em] text-[#0b1f44]">Enter the collection <ArrowDownToLine size={14} /></a></div><div className="relative min-h-[440px] overflow-hidden rounded-sm sm:min-h-[600px]"><img src={heroImage} alt="The Brand Store campaign" className="h-full w-full object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" /><div className="absolute bottom-5 left-5 flex items-center gap-3 text-[10px] uppercase tracking-[.15em] text-white/80"><span className="h-px w-8 bg-white/70" /> London / 2026</div></div></section><section id="collection" className="mx-auto max-w-[1380px] px-5 pb-20 sm:px-8"><div className="flex flex-col justify-between gap-5 border-t border-[#eadcc6] py-7 sm:flex-row sm:items-center"><div><p className="font-mono-ui text-[10px] uppercase tracking-[.2em] text-[#9a8f7f]">The edit</p><h2 className="mt-2 font-display text-3xl sm:text-4xl">Objects with a point of view.</h2></div><div className="flex flex-wrap gap-2"><select value={gender} onChange={(event) => setGender(event.target.value)} className="h-10 rounded-full border border-[#9a8f7f] bg-transparent px-3 text-xs outline-none" data-testid="select-catalogue-gender"><option value="all">Everyone</option><option value="women">Women</option><option value="men">Men</option></select><select value={category} onChange={(event) => setCategory(event.target.value)} className="h-10 rounded-full border border-[#9a8f7f] bg-transparent px-3 text-xs outline-none" data-testid="select-catalogue-category"><option value="all">All categories</option>{CATEGORY_GROUPS.map((group) => <optgroup key={group.label} label={group.label}>{group.options.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</optgroup>)}</select><select value={brand} onChange={(event) => setBrand(event.target.value)} className="h-10 max-w-[150px] rounded-full border border-[#9a8f7f] bg-transparent px-3 text-xs outline-none" data-testid="select-catalogue-brand"><option value="all">All houses</option>{brands.map((item) => <option key={item} value={item}>{item}</option>)}</select></div></div>{visible.length === 0 ? <div className="py-24 text-center"><Heart className="mx-auto text-[#0b1f44]" /><p className="mt-4 font-display text-2xl">A quieter edit is coming.</p><p className="mt-2 text-sm text-[#9a8f7f]">Try another filter.</p></div> : <div className="grid grid-cols-2 gap-x-3 gap-y-8 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-4">{visible.map((product) => <Link key={product.id} href={`/catalogue/product/${product.id}`} className="group block" data-testid={`link-public-product-${product.id}`}><div className="relative aspect-[.8] overflow-hidden bg-[#eadcc6]"><img src={imageFor(product)} alt={`${product.brand || 'The Brand Store'} ${categoryLabels[product.category]}`} className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]" /><span className="absolute bottom-3 left-3 font-mono-ui text-[9px] uppercase tracking-[.14em] text-white drop-shadow">{genderLabels[product.gender]}</span></div><div className="mt-3 flex items-start justify-between gap-2"><div><p className="font-display text-xl">{product.brand || 'House edit'}</p><p className="mt-1 text-[10px] uppercase tracking-[.14em] text-[#9a8f7f]">{categoryLabels[product.category]}</p></div><ArrowUpRight size={15} className="mt-1 text-[#9a8f7f] transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></div></Link>)}</div>}</section><section id="about" className="border-t border-[#eadcc6] bg-[#eadcc6]"><div className="mx-auto grid max-w-[1380px] gap-10 px-5 py-16 sm:px-8 md:grid-cols-[.8fr_1.2fr] md:py-24"><div><p className="font-mono-ui text-[10px] uppercase tracking-[.2em] text-[#9a8f7f]">The house</p><h2 className="mt-4 max-w-sm font-display text-4xl leading-tight sm:text-5xl">Luxury is in the edit.</h2></div><div className="max-w-xl"><p className="font-display text-2xl leading-relaxed text-[#0b1f44]">THE BRAND STORE is a private shopping house for people who know that the best things are rarely shouting.</p><p className="mt-6 text-sm leading-7 text-[#9a8f7f]">We bring together the pieces worth making room for: quietly distinctive, beautifully made, and chosen for a life beyond the season.</p></div></div></section></main><footer className="border-t border-[#eadcc6] bg-[#f8f5ed]"><div className="mx-auto flex max-w-[1380px] flex-col gap-4 px-5 py-7 text-[10px] uppercase tracking-[.14em] text-[#9a8f7f] sm:flex-row sm:items-center sm:justify-between sm:px-8"><span>© THE BRAND STORE</span><span>Luxury lives here</span></div></footer></div>;
 }
 
 function ProductDetailPage() {
@@ -366,7 +403,7 @@ function ProductDetailPage() {
   const { data: settings } = useGetSettings({ query: { queryKey: getGetSettingsQueryKey(), retry: false } });
   const product = publicProduct || adminProduct || fallbackProducts.find((item) => item.id === productId) || fallbackProducts[0];
   const [activeImage, setActiveImage] = useState(0);
-  const images = product.images?.length ? product.images : [{ id: 'fallback', imagePath: heroImage, isPrimary: true, sortOrder: 1 }];
+  const images = product.images?.length ? product.images : [{ id: 'fallback', imagePath: placeholderImage, isPrimary: true, sortOrder: 1 }];
   const whatsappNumber = settings?.whatsappNumber || import.meta.env.VITE_BRAND_STORE_WHATSAPP || '';
   const publicUrl = `${window.location.origin}/catalogue/product/${product.id}`;
   const whatsappMessage = `Hi The Brand Store, I'm interested in this item 👇\n\n${publicUrl}\n\nIs it available?`;
@@ -378,14 +415,39 @@ function EmptyState({ icon, title, description, action }: { icon: React.ReactNod
   return <div className="rounded-2xl border border-dashed border-[hsl(var(--border))] bg-[hsl(var(--card))] px-6 py-20 text-center"><div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[hsl(var(--muted))] text-[hsl(var(--primary))]">{icon}</div><h2 className="mt-4 font-display text-2xl">{title}</h2><p className="mx-auto mt-2 max-w-sm text-sm text-[hsl(var(--muted-foreground))]">{description}</p>{action && <div className="mt-5">{action}</div>}</div>;
 }
 
+function AnalyticsPage() {
+  const { data: summary, isLoading } = useGetDashboard({ query: { queryKey: getGetDashboardQueryKey(), retry: false } });
+  const total = summary?.totalUploaded ?? 48;
+  const published = summary?.published ?? 36;
+  const needsReview = summary?.needsReview ?? 12;
+  const categories = summary?.categories ?? { clothing: 19, bags: 11, footwear: 8, watches: 6, accessories: 4 };
+  const genderSplit = { women: summary?.women ?? 27, men: summary?.men ?? 21, unknown: summary?.unknown ?? 3 };
+  return <AdminShell><div className="mx-auto max-w-[1120px] px-5 py-8 sm:px-8 lg:px-10 lg:py-12">
+    <PageIntro eyebrow="Operations / 04" title="How the edit is landing." description="A quiet read on volume, review pace and where the collection leans." />
+    <div className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">{isLoading ? [1, 2, 3, 4].map((item) => <div key={item} className="h-32 animate-pulse rounded-xl bg-[hsl(var(--muted))]" />) : <><StatCard label="Uploaded this season" value={total} detail="Across all batches" accent /><StatCard label="Published" value={published} detail={`${Math.round((published / Math.max(total, 1)) * 100)}% of collection`} /><StatCard label="Awaiting review" value={needsReview} detail="Needs a human eye" /><StatCard label="Unsorted" value={genderSplit.unknown} detail="AI confidence below 70%" /></>}</div>
+    <div className="grid gap-5 lg:grid-cols-2">
+      <section className="rounded-2xl border border-[hsl(var(--card-border))] bg-[hsl(var(--card))] p-6 sm:p-8"><div className="flex items-center justify-between"><h2 className="font-display text-2xl">Category mix</h2><BarChart3 size={19} className="text-[hsl(var(--primary))]" /></div><div className="mt-7 space-y-4">{Object.entries(categories).map(([name, count]) => <div key={name} className="flex items-center gap-3 text-sm"><span className="w-24 text-[hsl(var(--muted-foreground))]">{categoryLabels[name] ?? name}</span><div className="h-2 flex-1 overflow-hidden rounded-full bg-[hsl(var(--muted))]"><div className="h-full rounded-full bg-[hsl(var(--accent))]" style={{ width: `${(Number(count) / Math.max(total, 1)) * 100}%` }} /></div><span className="w-6 text-right font-mono-ui text-xs">{count as number}</span></div>)}</div></section>
+      <section className="rounded-2xl border border-[hsl(var(--card-border))] bg-[hsl(var(--card))] p-6 sm:p-8"><div className="flex items-center justify-between"><h2 className="font-display text-2xl">Gender split</h2><TrendingUp size={19} className="text-[hsl(var(--primary))]" /></div><div className="mt-7 space-y-4">{Object.entries(genderSplit).map(([name, count]) => <div key={name} className="flex items-center gap-3 text-sm"><span className="w-24 text-[hsl(var(--muted-foreground))]">{genderLabels[name] ?? name}</span><div className="h-2 flex-1 overflow-hidden rounded-full bg-[hsl(var(--muted))]"><div className="h-full rounded-full bg-[hsl(var(--primary))]" style={{ width: `${(count / Math.max(total, 1)) * 100}%` }} /></div><span className="w-6 text-right font-mono-ui text-xs">{count}</span></div>)}</div></section>
+    </div>
+  </div></AdminShell>;
+}
+
+function AdminGateway() {
+  const [, setLocation] = useLocation();
+  useEffect(() => { setLocation('/admin/dashboard', { replace: true }); }, [setLocation]);
+  return <div className="flex min-h-[100dvh] items-center justify-center bg-[hsl(var(--sidebar))] text-[#c9a96a]"><Loader2 className="animate-spin" size={22} /></div>;
+}
+
 function Router() {
   return <ErrorBoundary><Switch>
+    <Route path="/admin" component={AdminGateway} />
     <Route path="/admin/dashboard" component={DashboardPage} />
     <Route path="/admin/upload" component={UploadPage} />
     <Route path="/admin/review" component={ReviewPage} />
     <Route path="/admin/products" component={ProductsPage} />
     <Route path="/admin/collections" component={CollectionsPage} />
     <Route path="/admin/catalogue" component={CatalogueAdminPage} />
+    <Route path="/admin/analytics" component={AnalyticsPage} />
     <Route path="/admin/settings" component={SettingsPage} />
     <Route path="/catalogue/product/:productId" component={ProductDetailPage} />
     <Route path="/catalogue" component={CataloguePage} />
