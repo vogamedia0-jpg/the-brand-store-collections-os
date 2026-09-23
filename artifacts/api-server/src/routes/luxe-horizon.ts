@@ -18,13 +18,8 @@ import {
 } from "@workspace/api-zod";
 
 type Gender = "men" | "women" | "unknown";
-type Category =
-  | "clothing"
-  | "footwear"
-  | "watches"
-  | "bags"
-  | "accessories"
-  | "other";
+/** Category slugs come from the shared THE BRAND STORE taxonomy (see lib/brand.ts on the client). */
+type Category = string;
 
 type Collection = {
   id: string;
@@ -69,10 +64,10 @@ const now = "2026-09-07T09:00:00.000Z";
 const collections: Collection[] = [
   {
     id: "collection-week-36",
-    name: "New Collection — 07 September 2026",
-    slug: "new-collection-07-september-2026",
-    startDate: "2026-09-07",
-    endDate: "2026-09-13",
+    name: "Autumn / Winter 2026",
+    slug: "autumn-winter-2026",
+    startDate: "2026-08-15",
+    endDate: "2026-12-20",
     isPublished: true,
     publishedAt: now,
     createdAt: now,
@@ -80,14 +75,14 @@ const collections: Collection[] = [
   },
   {
     id: "collection-week-35",
-    name: "New Collection — 31 August 2026",
-    slug: "new-collection-31-august-2026",
-    startDate: "2026-08-31",
-    endDate: "2026-09-06",
+    name: "Spring / Summer 2026",
+    slug: "spring-summer-2026",
+    startDate: "2026-01-10",
+    endDate: "2026-07-30",
     isPublished: false,
     publishedAt: null,
-    createdAt: "2026-08-31T09:00:00.000Z",
-    updatedAt: "2026-08-31T09:00:00.000Z",
+    createdAt: "2026-01-10T09:00:00.000Z",
+    updatedAt: "2026-01-10T09:00:00.000Z",
   },
 ];
 
@@ -96,10 +91,10 @@ const products: Product[] = [
     id: "product-marble-night",
     collectionId: "collection-week-36",
     gender: "women",
-    category: "clothing",
+    category: "women-clothing",
     brand: null,
     aiGender: "women",
-    aiCategory: "clothing",
+    aiCategory: "women-clothing",
     aiBrand: null,
     aiConfidence: 0.91,
     reviewed: true,
@@ -108,23 +103,17 @@ const products: Product[] = [
     sortOrder: 1,
     createdAt: now,
     updatedAt: now,
-    images: [
-      {
-        id: "image-marble-night",
-        imagePath: "Luxe_Horizon_in_Marble_Elegance_1788985336468.png",
-        isPrimary: true,
-        sortOrder: 1,
-      },
-    ],
+    // No demo photography: image slots stay empty until real catalogue photography is uploaded.
+    images: [],
   },
   {
     id: "product-burgundy-box",
     collectionId: "collection-week-36",
     gender: "women",
-    category: "bags",
+    category: "women-bags",
     brand: "Chanel",
     aiGender: "women",
-    aiCategory: "bags",
+    aiCategory: "women-bags",
     aiBrand: "Chanel",
     aiConfidence: 0.96,
     reviewed: true,
@@ -133,23 +122,16 @@ const products: Product[] = [
     sortOrder: 2,
     createdAt: now,
     updatedAt: now,
-    images: [
-      {
-        id: "image-burgundy-box",
-        imagePath: "Luxe_Horizon_Luxury_Brand_Mockup_1788985388415.png",
-        isPrimary: true,
-        sortOrder: 1,
-      },
-    ],
+    images: [],
   },
   {
     id: "product-rose-timepiece",
     collectionId: "collection-week-36",
     gender: "men",
-    category: "watches",
+    category: "men-watches",
     brand: "Rolex",
     aiGender: "men",
-    aiCategory: "watches",
+    aiCategory: "men-watches",
     aiBrand: "Rolex",
     aiConfidence: 0.74,
     reviewed: false,
@@ -158,21 +140,14 @@ const products: Product[] = [
     sortOrder: 3,
     createdAt: now,
     updatedAt: now,
-    images: [
-      {
-        id: "image-rose-timepiece",
-        imagePath: "Luxe_Horizon_Luxury_Brand_Mockup_1788985388415.png",
-        isPrimary: true,
-        sortOrder: 1,
-      },
-    ],
+    images: [],
   },
 ];
 
 let settings = {
   whatsappNumber: "",
-  businessName: "Luxe horizon",
-  tagline: "The pinnacle of luxury shopping",
+  businessName: "THE BRAND STORE",
+  tagline: "LUXURY LIVES HERE",
 };
 
 const router: IRouter = Router();
@@ -317,10 +292,10 @@ router.post("/products/upload", (req, res) => {
       id: `product-${Date.now()}-${index}`,
       collectionId: input.collectionId,
       gender,
-      category: "other",
+      category: input.category ?? "uncategorised",
       brand: null,
       aiGender: gender === "unknown" ? null : gender,
-      aiCategory: "other",
+      aiCategory: input.category ?? "uncategorised",
       aiBrand: null,
       aiConfidence: null,
       reviewed: false,

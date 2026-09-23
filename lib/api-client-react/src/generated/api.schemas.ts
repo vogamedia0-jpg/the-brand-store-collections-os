@@ -67,7 +67,7 @@ export const ProductGender = {
   unknown: 'unknown',
 } as const;
 
-export type ProductCategory = typeof ProductCategory[keyof typeof ProductCategory];
+export type ProductCategory = string;
 
 
 export const ProductCategory = {
@@ -112,7 +112,7 @@ export const ProductInputGender = {
   unknown: 'unknown',
 } as const;
 
-export type ProductInputCategory = typeof ProductInputCategory[keyof typeof ProductInputCategory];
+export type ProductInputCategory = string;
 
 
 export const ProductInputCategory = {
@@ -144,7 +144,7 @@ export const ProductUpdateGender = {
   unknown: 'unknown',
 } as const;
 
-export type ProductUpdateCategory = typeof ProductUpdateCategory[keyof typeof ProductUpdateCategory];
+export type ProductUpdateCategory = string;
 
 
 export const ProductUpdateCategory = {
@@ -182,7 +182,7 @@ export const BulkProductUpdateGender = {
 /**
  * @nullable
  */
-export type BulkProductUpdateCategory = typeof BulkProductUpdateCategory[keyof typeof BulkProductUpdateCategory] | null;
+export type BulkProductUpdateCategory = string | null;
 
 
 export const BulkProductUpdateCategory = {
@@ -227,6 +227,7 @@ export type UploadBatchImagesItem = {
 export interface UploadBatch {
   collectionId: string;
   batchHint: UploadBatchBatchHint;
+  category?: string;
   /** @minItems 1 */
   images: UploadBatchImagesItem[];
 }
@@ -299,7 +300,7 @@ export const GenderQueryParameter = {
   unknown: 'unknown',
 } as const;
 
-export type CategoryQueryParameter = typeof CategoryQueryParameter[keyof typeof CategoryQueryParameter];
+export type CategoryQueryParameter = string;
 
 
 export const CategoryQueryParameter = {

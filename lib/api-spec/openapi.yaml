@@ -351,7 +351,7 @@ components:
       required: false
       schema:
         type: string
-        enum: [clothing, footwear, watches, bags, accessories, other]
+        type: string
     BrandQuery:
       name: brand
       in: query
@@ -434,7 +434,7 @@ components:
         id: { type: string }
         collectionId: { type: string }
         gender: { type: string, enum: [men, women, unknown] }
-        category: { type: string, enum: [clothing, footwear, watches, bags, accessories, other] }
+        category: { type: string }
         brand: { type: ["string", "null"] }
         aiGender: { type: ["string", "null"] }
         aiCategory: { type: ["string", "null"] }
@@ -455,7 +455,7 @@ components:
       properties:
         collectionId: { type: string }
         gender: { type: string, enum: [men, women, unknown] }
-        category: { type: string, enum: [clothing, footwear, watches, bags, accessories, other] }
+        category: { type: string }
         brand: { type: ["string", "null"] }
         imagePath: { type: string }
         imageUrl: { type: ["string", "null"], format: uri }
@@ -464,7 +464,7 @@ components:
       type: object
       properties:
         gender: { type: string, enum: [men, women, unknown] }
-        category: { type: string, enum: [clothing, footwear, watches, bags, accessories, other] }
+        category: { type: string }
         brand: { type: ["string", "null"] }
         reviewed: { type: boolean }
         isActive: { type: boolean }
@@ -478,7 +478,7 @@ components:
           items: { type: string }
           minItems: 1
         gender: { type: ["string", "null"], enum: [men, women, unknown, null] }
-        category: { type: ["string", "null"], enum: [clothing, footwear, watches, bags, accessories, other, null] }
+        category: { type: ["string", "null"] }
         brand: { type: ["string", "null"] }
         reviewed: { type: ["boolean", "null"] }
         isPublished: { type: ["boolean", "null"] }
@@ -488,6 +488,7 @@ components:
       properties:
         collectionId: { type: string }
         batchHint: { type: string, enum: [mixed, men, women] }
+        category: { type: string }
         images:
           type: array
           items:

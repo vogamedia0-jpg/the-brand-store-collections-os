@@ -1,23 +1,20 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { AlertCircle } from 'lucide-react';
+import { Link } from 'wouter';
+import { BrandLogo } from '@/components/brand-logo';
+import { BRAND } from '@/lib/brand';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
-      <Card className="w-full max-w-md mx-4">
-        <CardContent className="pt-6">
-          <div className="flex mb-4 gap-2">
-            <AlertCircle className="h-8 w-8 text-red-500" />
-            <h1 className="text-2xl font-bold text-gray-900">
-              404 Page Not Found
-            </h1>
-          </div>
-
-          <p className="mt-4 text-sm text-gray-600">
-            Did you forget to add the page to the router?
-          </p>
-        </CardContent>
-      </Card>
+    <div className="flex min-h-[100dvh] flex-col items-center justify-center gap-6 bg-[var(--brand-black)] px-6 text-center text-[var(--brand-ivory)]">
+      <BrandLogo variant="dark" size="lg" />
+      <p className="font-mono-ui text-[10px] uppercase tracking-[.24em] text-[var(--brand-gold)]">Page not found</p>
+      <h1 className="max-w-md font-display text-3xl leading-tight sm:text-4xl">This room is not part of the collection.</h1>
+      <Link
+        href="/catalogue"
+        className="inline-flex items-center gap-2 rounded-full bg-[var(--brand-gold)] px-6 py-3 text-[11px] font-semibold uppercase tracking-[.16em] text-[var(--brand-navy)]"
+      >
+        Return to the catalogue
+      </Link>
+      <p className="text-[10px] uppercase tracking-[.2em] text-[var(--brand-ivory)]/40">{BRAND.tagline}</p>
     </div>
   );
 }

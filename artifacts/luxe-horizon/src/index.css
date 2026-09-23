@@ -5,6 +5,103 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+  THE BRAND STORE — colour system.
+  Source of truth: the official brand palette.
+    Deep Navy   #0B1F44   primary
+    Warm Beige  #EADCC6   secondary
+    Soft Gold   #C9A96A   accent
+    Taupe       #9A8F7F   neutral
+    Ivory       #F8F5ED   light
+  No other brand colours exist. Every value below derives from these five.
+*/
+
+:root {
+  /* Raw brand swatches (exact, unmodified) */
+  --brand-navy: #0b1f44;
+  --brand-beige: #eadcc6;
+  --brand-gold: #c9a96a;
+  --brand-taupe: #9a8f7f;
+  --brand-ivory: #f8f5ed;
+  --brand-black: #000000;
+
+  /* Brand ramps derived only from the swatches above */
+  --brand-navy-800: #081733;
+  --brand-navy-600: #14305f;
+  --brand-navy-100: #e6e9ef;
+  --brand-beige-200: #f2e9dc;
+  --brand-gold-700: #a9873f;
+  --brand-gold-200: #e5d5b4;
+  --brand-taupe-200: #d8d1c7;
+  --brand-taupe-600: #6f6759;
+  --brand-ink: #0a0a0a;
+
+  /* Semantic tokens — THE BRAND STORE light editorial */
+  --background: 44 44% 95%;
+  --foreground: 219 72% 15%;
+  --border: 37 24% 84%;
+  --input: 36 20% 80%;
+  --ring: 40 47% 60%;
+  --card: 0 0% 100%;
+  --card-foreground: 219 72% 15%;
+  --card-border: 37 26% 88%;
+  --primary: 219 72% 15%;
+  --primary-foreground: 44 44% 95%;
+  --secondary: 37 46% 85%;
+  --secondary-foreground: 219 72% 15%;
+  --muted: 38 30% 91%;
+  --muted-foreground: 36 12% 42%;
+  --accent: 40 47% 60%;
+  --accent-foreground: 219 72% 15%;
+  --destructive: 0 52% 38%;
+  --destructive-foreground: 44 44% 95%;
+  --sidebar: 219 72% 15%;
+  --sidebar-foreground: 44 44% 95%;
+  --sidebar-border: 219 45% 27%;
+  --sidebar-primary: 40 47% 60%;
+  --sidebar-primary-foreground: 219 72% 15%;
+  --sidebar-accent: 219 55% 23%;
+  --sidebar-accent-foreground: 44 44% 95%;
+
+  --app-font-sans: 'DM Sans', sans-serif;
+  --app-font-serif: 'Playfair Display', Georgia, serif;
+  --app-font-mono: 'DM Mono', monospace;
+  --radius: 0.5rem;
+  --elevate-1: rgba(11, 31, 68, 0.04);
+  --elevate-2: rgba(11, 31, 68, 0.08);
+}
+
+/* Admin (and any opt-in surface) dark presentation, built from the same five colours */
+.dark {
+  --background: 220 30% 7%;
+  --foreground: 44 44% 95%;
+  --border: 219 24% 22%;
+  --input: 219 24% 24%;
+  --ring: 40 47% 60%;
+  --card: 220 28% 11%;
+  --card-foreground: 44 44% 95%;
+  --card-border: 219 24% 20%;
+  --primary: 40 47% 60%;
+  --primary-foreground: 219 72% 12%;
+  --secondary: 219 25% 18%;
+  --secondary-foreground: 44 44% 95%;
+  --muted: 219 22% 16%;
+  --muted-foreground: 37 18% 70%;
+  --accent: 40 47% 60%;
+  --accent-foreground: 219 72% 12%;
+  --destructive: 0 52% 50%;
+  --destructive-foreground: 44 44% 95%;
+  --sidebar: 220 32% 5%;
+  --sidebar-foreground: 44 44% 95%;
+  --sidebar-border: 219 24% 18%;
+  --sidebar-primary: 40 47% 60%;
+  --sidebar-primary-foreground: 219 72% 12%;
+  --sidebar-accent: 219 25% 14%;
+  --sidebar-accent-foreground: 44 44% 95%;
+  --elevate-1: rgba(255, 255, 255, 0.04);
+  --elevate-2: rgba(255, 255, 255, 0.08);
+}
+
 @theme inline {
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -33,77 +130,25 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-:root {
-  --background: 36 33% 95%;
-  --foreground: 20 16% 13%;
-  --border: 33 17% 83%;
-  --input: 33 17% 83%;
-  --ring: 346 53% 25%;
-  --card: 38 38% 97%;
-  --card-foreground: 20 16% 13%;
-  --card-border: 33 21% 86%;
-  --primary: 346 53% 25%;
-  --primary-foreground: 36 33% 95%;
-  --secondary: 31 25% 88%;
-  --secondary-foreground: 20 16% 13%;
-  --muted: 33 19% 90%;
-  --muted-foreground: 25 10% 45%;
-  --accent: 37 54% 72%;
-  --accent-foreground: 20 16% 13%;
-  --destructive: 0 62% 42%;
-  --destructive-foreground: 38 38% 97%;
-  --sidebar: 347 47% 20%;
-  --sidebar-foreground: 36 33% 95%;
-  --sidebar-border: 347 31% 31%;
-  --sidebar-primary: 37 54% 72%;
-  --sidebar-primary-foreground: 20 16% 13%;
-  --sidebar-accent: 347 37% 28%;
-  --sidebar-accent-foreground: 36 33% 95%;
-  --app-font-sans: 'DM Sans', sans-serif;
-  --app-font-serif: 'Playfair Display', Georgia, serif;
-  --app-font-mono: 'DM Mono', monospace;
-  --radius: 0.65rem;
-  --elevate-1: rgba(66, 25, 33, 0.04);
-  --elevate-2: rgba(66, 25, 33, 0.08);
-}
-
-.dark {
-  --background: 20 16% 13%;
-  --foreground: 36 33% 95%;
-  --border: 25 12% 29%;
-  --input: 25 12% 29%;
-  --card: 24 15% 17%;
-  --card-foreground: 36 33% 95%;
-  --card-border: 25 12% 29%;
-  --primary: 37 54% 72%;
-  --primary-foreground: 20 16% 13%;
-  --secondary: 25 12% 26%;
-  --secondary-foreground: 36 33% 95%;
-  --muted: 25 12% 23%;
-  --muted-foreground: 33 13% 70%;
-  --accent: 346 53% 35%;
-  --accent-foreground: 36 33% 95%;
-  --destructive: 0 62% 48%;
-  --destructive-foreground: 36 33% 95%;
-  --sidebar: 20 16% 10%;
-  --sidebar-foreground: 36 33% 95%;
-  --sidebar-border: 25 12% 25%;
-  --sidebar-primary: 37 54% 72%;
-  --sidebar-primary-foreground: 20 16% 13%;
-  --sidebar-accent: 25 12% 22%;
-  --sidebar-accent-foreground: 36 33% 95%;
-}
-
 @layer base {
   * { @apply border-border; }
   html { scroll-behavior: smooth; }
-  body { @apply font-sans antialiased bg-background text-foreground; }
-  button, a, input, select { -webkit-tap-highlight-color: transparent; }
+  body { @apply font-sans antialiased bg-background text-foreground; overflow-x: hidden; }
+  button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+  :focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
 }
 
 @layer utilities {
   .font-display { font-family: var(--app-font-serif); }
   .font-mono-ui { font-family: var(--app-font-mono); }
+  .brand-navy { color: var(--brand-navy); }
+  .brand-gold { color: var(--brand-gold); }
+  .bg-brand-navy { background-color: var(--brand-navy); }
+  .bg-brand-beige { background-color: var(--brand-beige); }
+  .bg-brand-gold { background-color: var(--brand-gold); }
+  .bg-brand-ivory { background-color: var(--brand-ivory); }
+  .bg-brand-black { background-color: var(--brand-black); }
+  .border-brand-taupe { border-color: var(--brand-taupe); }
   .noise::after {
     content: '';
     position: fixed;
@@ -113,12 +158,21 @@
     z-index: 50;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
   }
-  .shadow-editorial { box-shadow: 0 18px 40px rgba(58, 24, 31, .09); }
+  .shadow-editorial { box-shadow: 0 18px 40px rgba(11, 31, 68, .09); }
   .animate-rise { animation: rise .55s cubic-bezier(.22,.7,.2,1) both; }
   .animate-fade { animation: fade .45s ease both; }
   .delay-1 { animation-delay: 80ms; }
   .delay-2 { animation-delay: 160ms; }
   .delay-3 { animation-delay: 240ms; }
+}
+
+/* Applied only while the admin theme toggle changes, so the swap is smooth but never on first paint. */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition: background-color .22s ease, border-color .22s ease, color .22s ease, fill .22s ease !important;
+  transition-delay: 0s !important;
 }
 
 @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }

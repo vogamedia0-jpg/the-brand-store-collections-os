@@ -154,7 +154,7 @@ export const GetDashboardResponse = zod.object({
 export const ListProductsQueryParams = zod.object({
   "collectionId": zod.coerce.string().optional(),
   "gender": zod.enum(['men', 'women', 'unknown']).optional(),
-  "category": zod.enum(['clothing', 'footwear', 'watches', 'bags', 'accessories', 'other']).optional(),
+  "category": zod.string().optional(),
   "reviewed": zod.coerce.boolean().optional(),
   "published": zod.coerce.boolean().optional()
 })
@@ -163,7 +163,7 @@ export const ListProductsResponseItem = zod.object({
   "id": zod.string(),
   "collectionId": zod.string(),
   "gender": zod.enum(['men', 'women', 'unknown']),
-  "category": zod.enum(['clothing', 'footwear', 'watches', 'bags', 'accessories', 'other']),
+  "category": zod.string(),
   "brand": zod.string().nullish(),
   "aiGender": zod.string().nullish(),
   "aiCategory": zod.string().nullish(),
@@ -191,7 +191,7 @@ export const ListProductsResponse = zod.array(ListProductsResponseItem)
 export const CreateProductBody = zod.object({
   "collectionId": zod.string(),
   "gender": zod.enum(['men', 'women', 'unknown']),
-  "category": zod.enum(['clothing', 'footwear', 'watches', 'bags', 'accessories', 'other']),
+  "category": zod.string(),
   "brand": zod.string().nullish(),
   "imagePath": zod.string(),
   "imageUrl": zod.string().url().nullish()
@@ -201,7 +201,7 @@ export const CreateProductResponse = zod.object({
   "id": zod.string(),
   "collectionId": zod.string(),
   "gender": zod.enum(['men', 'women', 'unknown']),
-  "category": zod.enum(['clothing', 'footwear', 'watches', 'bags', 'accessories', 'other']),
+  "category": zod.string(),
   "brand": zod.string().nullish(),
   "aiGender": zod.string().nullish(),
   "aiCategory": zod.string().nullish(),
@@ -233,7 +233,7 @@ export const GetProductResponse = zod.object({
   "id": zod.string(),
   "collectionId": zod.string(),
   "gender": zod.enum(['men', 'women', 'unknown']),
-  "category": zod.enum(['clothing', 'footwear', 'watches', 'bags', 'accessories', 'other']),
+  "category": zod.string(),
   "brand": zod.string().nullish(),
   "aiGender": zod.string().nullish(),
   "aiCategory": zod.string().nullish(),
@@ -263,7 +263,7 @@ export const UpdateProductParams = zod.object({
 
 export const UpdateProductBody = zod.object({
   "gender": zod.enum(['men', 'women', 'unknown']).optional(),
-  "category": zod.enum(['clothing', 'footwear', 'watches', 'bags', 'accessories', 'other']).optional(),
+  "category": zod.string().optional(),
   "brand": zod.string().nullish(),
   "reviewed": zod.boolean().optional(),
   "isActive": zod.boolean().optional(),
@@ -275,7 +275,7 @@ export const UpdateProductResponse = zod.object({
   "id": zod.string(),
   "collectionId": zod.string(),
   "gender": zod.enum(['men', 'women', 'unknown']),
-  "category": zod.enum(['clothing', 'footwear', 'watches', 'bags', 'accessories', 'other']),
+  "category": zod.string(),
   "brand": zod.string().nullish(),
   "aiGender": zod.string().nullish(),
   "aiCategory": zod.string().nullish(),
@@ -315,7 +315,7 @@ export const DeleteProductResponse = zod.void()
 export const BulkUpdateProductsBody = zod.object({
   "productIds": zod.array(zod.string()).min(1),
   "gender": zod.union([zod.literal('men'),zod.literal('women'),zod.literal('unknown'),zod.literal(null)]).nullish(),
-  "category": zod.union([zod.literal('clothing'),zod.literal('footwear'),zod.literal('watches'),zod.literal('bags'),zod.literal('accessories'),zod.literal('other'),zod.literal(null)]).nullish(),
+  "category": zod.string().nullish(),
   "brand": zod.string().nullish(),
   "reviewed": zod.boolean().nullish(),
   "isPublished": zod.boolean().nullish()
@@ -325,7 +325,7 @@ export const BulkUpdateProductsResponseItem = zod.object({
   "id": zod.string(),
   "collectionId": zod.string(),
   "gender": zod.enum(['men', 'women', 'unknown']),
-  "category": zod.enum(['clothing', 'footwear', 'watches', 'bags', 'accessories', 'other']),
+  "category": zod.string(),
   "brand": zod.string().nullish(),
   "aiGender": zod.string().nullish(),
   "aiCategory": zod.string().nullish(),
@@ -356,6 +356,7 @@ export const BulkUpdateProductsResponse = zod.array(BulkUpdateProductsResponseIt
 export const UploadProductsBody = zod.object({
   "collectionId": zod.string(),
   "batchHint": zod.enum(['mixed', 'men', 'women']),
+  "category": zod.string().optional(),
   "images": zod.array(zod.object({
   "imagePath": zod.string(),
   "imageUrl": zod.string().url().nullish()
@@ -366,7 +367,7 @@ export const UploadProductsResponseItem = zod.object({
   "id": zod.string(),
   "collectionId": zod.string(),
   "gender": zod.enum(['men', 'women', 'unknown']),
-  "category": zod.enum(['clothing', 'footwear', 'watches', 'bags', 'accessories', 'other']),
+  "category": zod.string(),
   "brand": zod.string().nullish(),
   "aiGender": zod.string().nullish(),
   "aiCategory": zod.string().nullish(),
@@ -394,7 +395,7 @@ export const UploadProductsResponse = zod.array(UploadProductsResponseItem)
 export const GetCatalogueQueryParams = zod.object({
   "collectionId": zod.coerce.string().optional(),
   "gender": zod.enum(['men', 'women', 'unknown']).optional(),
-  "category": zod.enum(['clothing', 'footwear', 'watches', 'bags', 'accessories', 'other']).optional(),
+  "category": zod.string().optional(),
   "brand": zod.coerce.string().optional()
 })
 
@@ -414,7 +415,7 @@ export const GetCatalogueResponse = zod.object({
   "id": zod.string(),
   "collectionId": zod.string(),
   "gender": zod.enum(['men', 'women', 'unknown']),
-  "category": zod.enum(['clothing', 'footwear', 'watches', 'bags', 'accessories', 'other']),
+  "category": zod.string(),
   "brand": zod.string().nullish(),
   "aiGender": zod.string().nullish(),
   "aiCategory": zod.string().nullish(),
@@ -448,7 +449,7 @@ export const GetPublicProductResponse = zod.object({
   "id": zod.string(),
   "collectionId": zod.string(),
   "gender": zod.enum(['men', 'women', 'unknown']),
-  "category": zod.enum(['clothing', 'footwear', 'watches', 'bags', 'accessories', 'other']),
+  "category": zod.string(),
   "brand": zod.string().nullish(),
   "aiGender": zod.string().nullish(),
   "aiCategory": zod.string().nullish(),

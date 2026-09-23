@@ -1,4 +1,6 @@
 import { jsPDF } from 'jspdf';
+import { BRAND, categoryLabel } from '@/lib/brand';
+import { imageSrc } from '@/components/product-image';
 
 type PdfProduct = {
   brand?: string | null;
@@ -7,87 +9,118 @@ type PdfProduct = {
   images?: { imagePath: string; isPrimary: boolean }[];
 };
 
+/* Exact brand palette — no other colours are introduced. */
+const NAVY = '#0B1F44';
+const GOLD = '#C9A96A';
+const BEIGE = '#EADCC6';
+const TAUPE = '#9A8F7F';
+const IVORY = '#F8F5ED';
+
 const imageDataUrl = async (src: string) => {
   const response = await fetch(src);
   const blob = await response.blob();
   return new Promise<{ data: string; format: 'PNG' | 'JPEG' }>((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => resolve({
-      data: String(reader.result),
-      format: blob.type.includes('png') ? 'PNG' : 'JPEG',
-    });
+    reader.onload = () =>
+      resolve({
+        data: String(reader.result),
+        format: blob.type.includes('png') ? 'PNG' : 'JPEG',
+      });
     reader.onerror = () => reject(reader.error);
     reader.readAsDataURL(blob);
   });
 };
 
-export async function generateBrandedCataloguePdf(
-  title: string,
-  products: PdfProduct[],
-  resolveImage: (path?: string | null) => string,
-) {
+export async function generateBrandedCataloguePdf(title: string, products: PdfProduct[]) {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-  const burgundy = '#642536';
-  const ivory = '#F3EEE6';
-  const champagne = '#D8B87F';
 
-  doc.setFillColor(ivory);
+  // Cover
+  doc.setFillColor(IVORY);
   doc.rect(0, 0, 210, 297, 'F');
-  doc.setFillColor(burgundy);
-  doc.rect(0, 0, 210, 12, 'F');
-  doc.setTextColor(burgundy);
-  doc.setFont('times', 'italic');
-  doc.setFontSize(34);
-  doc.text('Luxe horizon', 22, 82);
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(10);
-  doc.setTextColor('#806B61');
-  doc.text('The pinnacle of luxury shopping', 23, 92);
-  doc.setDrawColor(champagne);
-  doc.line(23, 104, 78, 104);
-  doc.setFontSize(14);
-  doc.setTextColor('#241B18');
-  doc.text(title, 23, 124);
-  doc.setFontSize(9);
-  doc.setTextColor('#806B61');
-  doc.text(`${products.length} pieces · Private edit`, 23, 133);
-  doc.setFontSize(8);
-  doc.text('Prepared for personal sharing through WhatsApp', 23, 270);
-  doc.setTextColor(burgundy);
-  doc.text('LUXE HORIZON', 23, 278);
+  doc.setFillColor(NAVY);
+  doc.rect(0, 0, 210, 96, 'F');
+  doc.setDrawColor(GOLD);
+  doc.setLineWidth(0.4);
+  doc.line(22, 118, 78, 118);
 
+  doc.setTextColor(GOLD);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.text('T H E', 22, 70);
+  doc.setTextColor(IVORY);
+  doc.setFont('times', 'normal');
+  doc.setFontSize(30);
+  doc.text('BRAND STORE', 22, 84);
+  doc.setTextColor(GOLD);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.text(BRAND.tagline, 22, 92);
+
+  doc.setTextColor(NAVY);
+  doc.setFont('times', 'normal');
+  doc.setFontSize(18);
+  doc.text(title, 22, 136);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(TAUPE);
+  doc.text(`${products.length} ${products.length === 1 ? 'piece' : 'pieces'} · Prepared for personal sharing`, 22, 145);
+
+  doc.setFontSize(8);
+  doc.text(BRAND.name, 22, 272);
+  doc.setTextColor(GOLD);
+  doc.text(BRAND.positioning, 22, 278);
+
+  // Product plates
   for (let index = 0; index < products.length; index += 1) {
     const product = products[index];
     if (index % 2 === 0) {
       doc.addPage();
-      doc.setFillColor(ivory);
+      doc.setFillColor(IVORY);
       doc.rect(0, 0, 210, 297, 'F');
     }
+
     const column = index % 2;
     const x = column === 0 ? 18 : 111;
     const y = 24;
+
     const imagePath = product.images?.find((image) => image.isPrimary)?.imagePath || product.images?.[0]?.imagePath;
-    try {
-      if (imagePath) {
-        const image = await imageDataUrl(resolveImage(imagePath));
+    const src = imageSrc(imagePath);
+
+    let placed = false;
+    if (src) {
+      try {
+        const image = await imageDataUrl(src);
         doc.addImage(image.data, image.format, x, y, 80, 104, undefined, 'FAST');
+        placed = true;
+      } catch {
+        placed = false;
       }
-    } catch {
-      doc.setFillColor('#E3D8CB');
-      doc.rect(x, y, 80, 104, 'F');
     }
-    doc.setTextColor(burgundy);
+    if (!placed) {
+      doc.setFillColor(BEIGE);
+      doc.rect(x, y, 80, 104, 'F');
+      doc.setDrawColor(GOLD);
+      doc.setLineWidth(0.2);
+      doc.rect(x + 3, y + 3, 74, 98);
+      doc.setTextColor(TAUPE);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.text('PHOTOGRAPHY FORTHCOMING', x + 40, y + 54, { align: 'center' });
+    }
+
+    doc.setTextColor(NAVY);
     doc.setFont('times', 'normal');
-    doc.setFontSize(16);
-    doc.text(product.brand || 'Luxe Horizon edit', x, 144);
+    doc.setFontSize(15);
+    doc.text(product.brand || 'House selection', x, 142);
     doc.setFont('helvetica', 'normal');
-    doc.setTextColor('#806B61');
-    doc.setFontSize(8);
-    doc.text(`${product.gender.toUpperCase()} · ${product.category.toUpperCase()}`, x, 151);
-    doc.setDrawColor('#D5C7B9');
-    doc.line(x, 158, x + 38, 158);
+    doc.setTextColor(TAUPE);
+    doc.setFontSize(7.5);
+    doc.text(`${product.gender.toUpperCase()} · ${categoryLabel(product.category).toUpperCase()}`, x, 149);
+    doc.setDrawColor(GOLD);
+    doc.setLineWidth(0.3);
+    doc.line(x, 155, x + 34, 155);
   }
 
-  const safeName = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'luxe-horizon-catalogue';
+  const safeName = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'the-brand-store-catalogue';
   doc.save(`${safeName}.pdf`);
 }
