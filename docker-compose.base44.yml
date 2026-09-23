@@ -1,0 +1,67 @@
+services:
+  deps:
+    image: node:24
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: sh -c "npm install -g pnpm@10 && pnpm install --frozen-lockfile"
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: luxe
+      POSTGRES_PASSWORD: luxe_local_dev
+      POSTGRES_DB: luxe_horizon
+    volumes:
+      - luxe_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U luxe -d luxe_horizon"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  api:
+    image: node:24
+    working_dir: /app
+    volumes:
+      - .:/app
+    env_file:
+      - /run/base44/app.env
+    environment:
+      PORT: "8000"
+      DATABASE_URL: postgres://luxe:luxe_local_dev@db:5432/luxe_horizon
+    command: sh -c "npm install -g pnpm@10 && pnpm --filter @workspace/api-server exec tsx watch src/index.ts"
+    depends_on:
+      deps:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:8000/api/healthz').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  web:
+    image: node:24
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    env_file:
+      - /run/base44/app.env
+    environment:
+      PORT: "3000"
+      BASE_PATH: "/"
+      CHOKIDAR_USEPOLLING: "true"
+      __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS:
+    command: sh -c "npm install -g pnpm@10 && pnpm --filter @workspace/luxe-horizon run dev"
+    depends_on:
+      deps:
+        condition: service_completed_successfully
+      api:
+        condition: service_healthy
+
+volumes:
+  luxe_pgdata:
