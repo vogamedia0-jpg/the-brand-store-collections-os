@@ -119,7 +119,11 @@ const BRAND_OPTIONS = [
   'Tiffany & Co.', 'Tom Ford', 'The Row', 'Vacheron Constantin', 'Valentino', 'Van Cleef & Arpels', 'Versace',
 ].sort();
 const formatDate = (value?: string | null) => value ? new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(value)) : 'Not set';
-const resolveImage = (path?: string | null) => !path ? placeholderImage : path.startsWith('/') ? path : assetImageMap[path] || placeholderImage;
+const resolveImage = (path?: string | null) => {
+  if (!path) return placeholderImage;
+  if (path.startsWith('/') || path.startsWith('http://') || path.startsWith('https://') || path.startsWith('blob:') || path.startsWith('data:')) return path;
+  return assetImageMap[path] || placeholderImage;
+};
 const imageFor = (product: Product) => resolveImage(product.images?.find((image) => image.isPrimary)?.imagePath || product.images?.[0]?.imagePath);
 
 function AppLogo({ dark = false }: { dark?: boolean }) {
@@ -408,8 +412,10 @@ function ProductDetailPage() {
   const { data: publicProduct, isLoading } = useGetPublicProduct(productId, { query: { enabled: !!productId, queryKey: getGetPublicProductQueryKey(productId), retry: false } });
   const { data: adminProduct } = useGetProduct(productId, { query: { enabled: !!productId, queryKey: getGetProductQueryKey(productId), retry: false } });
   const { data: settings } = useGetSettings({ query: { queryKey: getGetSettingsQueryKey(), retry: false } });
-  const product = publicProduct || adminProduct || fallbackProducts.find((item) => item.id === productId) || fallbackProducts[0];
+  const productData = publicProduct || adminProduct || fallbackProducts.find((item) => item.id === productId);
   const [activeImage, setActiveImage] = useState(0);
+  if (!isLoading && !productData) return <NotFound />;
+  const product = productData || fallbackProducts[0];
   const images = product.images?.length ? product.images : [{ id: 'fallback', imagePath: placeholderImage, isPrimary: true, sortOrder: 1 }];
   const whatsappNumber = settings?.whatsappNumber || import.meta.env.VITE_BRAND_STORE_WHATSAPP || '';
   const publicUrl = `${window.location.origin}/catalogue/product/${product.id}`;
