@@ -70,6 +70,16 @@ type Product = {
 };
 type Collection = { id: string; name: string; slug: string; startDate?: string | null; endDate?: string | null; isPublished: boolean; publishedAt?: string | null; createdAt: string; updatedAt: string };
 
+type ApiList<T> = T[] | { data?: T[] | { data?: T[]; items?: T[]; results?: T[] }; items?: T[]; results?: T[] } | null | undefined;
+const normalizeList = <T,>(value: ApiList<T>): T[] => {
+  if (Array.isArray(value)) return value;
+  if (!value || typeof value !== 'object') return [];
+  const payload = value.data;
+  if (Array.isArray(payload)) return payload;
+  if (payload && typeof payload === 'object') return payload.data ?? payload.items ?? payload.results ?? [];
+  return value.items ?? value.results ?? [];
+};
+
 const fallbackCollection: Collection = {
   id: 'collection-week-36', name: 'Autumn / Winter 2026', slug: 'new-collection-07-september-2026',
   startDate: '2026-08-15', endDate: '2026-12-20', isPublished: true,
@@ -277,7 +287,8 @@ function UploadPage() {
   const [hint, setHint] = useState<'mixed' | 'men' | 'women'>('mixed');
   const [collectionId, setCollectionId] = useState(fallbackCollection.id);
   const [message, setMessage] = useState('');
-  const activeCollections = collections?.length ? collections : [fallbackCollection];
+  const collectionList = normalizeList<Collection>(collections);
+  const activeCollections = collectionList.length ? collectionList : [fallbackCollection];
   const addFiles = (incoming: FileList | null) => incoming && setFiles((current) => [...current, ...Array.from(incoming)]);
   const submit = () => {
     if (!files.length) { setMessage('Choose at least one image to start a batch.'); return; }
@@ -295,7 +306,8 @@ function ReviewPage() {
   const bulkUpdate = useBulkUpdateProducts();
   const [selected, setSelected] = useState<string[]>([]);
   const [filter, setFilter] = useState<'all' | 'unknown'>('all');
-  const products = (data?.length ? data : fallbackProducts.filter((product) => !product.reviewed)).filter((product) => filter === 'all' || product.gender === 'unknown');
+  const productList = normalizeList<Product>(data);
+  const products = (productList.length ? productList : fallbackProducts.filter((product) => !product.reviewed)).filter((product) => filter === 'all' || product.gender === 'unknown');
   const toggle = (id: string) => setSelected((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
   const review = (product: Product, reviewed = true) => updateProduct.mutate({ productId: product.id, data: { reviewed, gender: product.gender, category: apiCategoryFor(product.category), brand: product.brand || null } });
   return <AdminShell><div className="mx-auto max-w-[1440px] px-5 py-8 sm:px-8 lg:px-10 lg:py-12"><PageIntro eyebrow="Workspace / 03" title="Trust, then tune." description="The unsure queue is deliberately small. Confirm what feels right and keep the house language consistent." action={<Link href="/admin/products" className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--border))] px-4 py-3 text-xs font-semibold"><ListFilter size={15} /> All products</Link>} /><div className="mb-5 flex flex-wrap items-center justify-between gap-3"><div className="flex items-center gap-2 rounded-full bg-[hsl(var(--muted))] p-1">{(['all', 'unknown'] as const).map((item) => <button type="button" key={item} onClick={() => setFilter(item)} className={`rounded-full px-4 py-2 text-xs font-semibold capitalize ${filter === item ? 'bg-[hsl(var(--card))] shadow-sm' : 'text-[hsl(var(--muted-foreground))]'}`} data-testid={`button-review-filter-${item}`}>{item === 'all' ? `All unsure (${products.length})` : 'Unknown only'}</button>)}</div>{selected.length > 0 && <div className="flex items-center gap-2"><span className="text-xs text-[hsl(var(--muted-foreground))]">{selected.length} selected</span><button type="button" onClick={() => bulkUpdate.mutate({ data: { productIds: selected, reviewed: true } })} className="rounded-full bg-[hsl(var(--primary))] px-4 py-2.5 text-xs font-semibold text-[hsl(var(--primary-foreground))]" data-testid="button-bulk-approve">Approve selected</button></div>}</div>{products.length === 0 ? <EmptyState icon={<CheckCircle2 />} title="The queue is clear." description="Every item has been reviewed for this collection." action={<Link href="/admin/products" className="rounded-full bg-[hsl(var(--primary))] px-4 py-2.5 text-xs font-semibold text-white">Browse products</Link>} /> : <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{products.map((product, index) => <article key={product.id} className="animate-rise overflow-hidden rounded-2xl border border-[hsl(var(--card-border))] bg-[hsl(var(--card))] shadow-editorial" style={{ animationDelay: `${index * 55}ms` }}><div className="relative aspect-[1.15] overflow-hidden bg-[#eadcc6]"><img src={imageFor(product)} alt={`${product.brand || 'Unsorted'} ${categoryLabels[product.category]}`} className="h-full w-full object-cover transition duration-500 hover:scale-[1.03]" /><button type="button" onClick={() => toggle(product.id)} aria-label={`Select product ${product.id}`} className={`absolute left-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border ${selected.includes(product.id) ? 'border-[hsl(var(--primary))] bg-[hsl(var(--primary))] text-white' : 'border-white/70 bg-black/20 text-white'}`} data-testid={`button-select-product-${product.id}`}>{selected.includes(product.id) && <Check size={14} />}</button><Badge tone={product.gender === 'unknown' ? 'warning' : 'gold'}>{Math.round((product.aiConfidence || .5) * 100)}% confidence</Badge><div className="absolute right-3 top-3"><Badge tone={product.gender === 'unknown' ? 'warning' : 'dark'}>{genderLabels[product.gender]}</Badge></div></div><div className="p-5"><div className="flex items-start justify-between gap-3"><div><p className="font-mono-ui text-[9px] uppercase tracking-[.15em] text-[hsl(var(--muted-foreground))]">{product.id}</p><h2 className="mt-1 font-display text-2xl">{product.brand || 'Brand to confirm'}</h2><p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">{categoryLabels[product.category]} · AI suggested {product.aiCategory || 'other'}</p></div><IconButton label={`Edit ${product.id}`}><Pencil size={15} /></IconButton></div><div className="mt-5 flex gap-2"><button type="button" onClick={() => review(product, true)} className="flex-1 rounded-full bg-[hsl(var(--primary))] px-3 py-2.5 text-xs font-semibold text-white" data-testid={`button-approve-${product.id}`}>Approve</button><button type="button" onClick={() => review(product, false)} className="rounded-full border border-[hsl(var(--border))] px-3 py-2.5 text-xs font-semibold" data-testid={`button-keep-unsure-${product.id}`}>Keep unsure</button></div></div></article>)}</div>}</div></AdminShell>;
@@ -310,7 +322,8 @@ function ProductsPage() {
   const deleteProduct = useDeleteProduct();
   const [search, setSearch] = useState('');
   const [gender, setGender] = useState('all');
-  const products = (data?.length ? data : fallbackProducts).filter((product) => `${product.brand || ''} ${product.category}`.toLowerCase().includes(search.toLowerCase()) && (gender === 'all' || product.gender === gender));
+  const productList = normalizeList<Product>(data);
+  const products = (productList.length ? productList : fallbackProducts).filter((product) => `${product.brand || ''} ${product.category}`.toLowerCase().includes(search.toLowerCase()) && (gender === 'all' || product.gender === gender));
   return <AdminShell><div className="mx-auto max-w-[1440px] px-5 py-8 sm:px-8 lg:px-10 lg:py-12"><PageIntro eyebrow="Catalogue / 01" title="The product room." description="Everything in the active collection, from first upload to public-facing finish." action={<Link href="/admin/upload" className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--primary))] px-5 py-3 text-xs font-semibold text-white"><Plus size={15} /> Add products</Link>} /><div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"><label className="relative block max-w-md flex-1"><Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[hsl(var(--muted-foreground))]" /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search brand or category" data-testid="input-search-products" className="h-11 w-full rounded-full border border-[hsl(var(--input))] bg-[hsl(var(--card))] pl-10 pr-4 text-sm outline-none focus:border-[hsl(var(--primary))]" /></label><div className="flex items-center gap-2"><Filter size={15} className="text-[hsl(var(--muted-foreground))]" />{['all', 'women', 'men', 'unknown'].map((item) => <button type="button" key={item} onClick={() => setGender(item)} className={`rounded-full px-3 py-2 text-xs font-semibold capitalize ${gender === item ? 'bg-[hsl(var(--primary))] text-white' : 'bg-[hsl(var(--muted))]'}`} data-testid={`button-filter-${item}`}>{item === 'all' ? 'All' : genderLabels[item]}</button>)}</div></div>{products.length === 0 ? <EmptyState icon={<Package />} title="No products match this edit." description="Try another brand, category or gender filter." /> : <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">{products.map((product) => <ProductCard key={product.id} product={product} onDelete={(id) => { if (window.confirm('Remove this product from the collection?')) deleteProduct.mutate({ productId: id }); }} />)}</div>}</div></AdminShell>;
 }
 
@@ -321,7 +334,8 @@ function CollectionsPage() {
   const deleteCollection = useDeleteCollection();
   const [showCreate, setShowCreate] = useState(false);
   const [name, setName] = useState('');
-  const collections = data?.length ? data : [fallbackCollection, { ...fallbackCollection, id: 'ss26', slug: 'spring-summer-2026', name: 'Spring / Summer 2026', isPublished: false, publishedAt: null, startDate: '2026-01-10', endDate: '2026-07-30' }];
+  const collectionList = normalizeList<Collection>(data);
+  const collections = collectionList.length ? collectionList : [fallbackCollection, { ...fallbackCollection, id: 'ss26', slug: 'spring-summer-2026', name: 'Spring / Summer 2026', isPublished: false, publishedAt: null, startDate: '2026-01-10', endDate: '2026-07-30' }];
   const submit = () => { const clean = name.trim(); if (!clean) return; createCollection.mutate({ data: { name: clean, slug: clean.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-'), startDate: null, endDate: null } }, { onSuccess: () => { setName(''); setShowCreate(false); } }); };
   return <AdminShell><div className="mx-auto max-w-[1120px] px-5 py-8 sm:px-8 lg:px-10 lg:py-12"><PageIntro eyebrow="Catalogue / 02" title="Collection history." description="Seasons have a lifespan. Keep the archive orderly, and only let one edit lead the room." action={<button type="button" onClick={() => setShowCreate((current) => !current)} className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--primary))] px-5 py-3 text-xs font-semibold text-white" data-testid="button-new-collection"><Plus size={15} /> New collection</button>} />{showCreate && <div className="mb-5 flex flex-col gap-3 rounded-2xl border border-[hsl(var(--primary))]/20 bg-[hsl(var(--card))] p-4 sm:flex-row"><input autoFocus value={name} onChange={(event) => setName(event.target.value)} placeholder="e.g. Resort 2027" data-testid="input-new-collection-name" className="h-11 flex-1 rounded-lg border border-[hsl(var(--input))] bg-transparent px-3 text-sm outline-none" /><button type="button" onClick={submit} className="rounded-full bg-[hsl(var(--primary))] px-5 py-2 text-xs font-semibold text-white" data-testid="button-save-collection">Create collection</button></div>}<div className="space-y-3">{collections.map((collection, index) => <div key={collection.id} className={`group flex flex-col gap-5 rounded-2xl border p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6 ${index === 0 ? 'border-[hsl(var(--primary))]/25 bg-[hsl(var(--card))] shadow-editorial' : 'border-[hsl(var(--card-border))] bg-[hsl(var(--card))]'}`}><div className="flex items-start gap-4"><div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${index === 0 ? 'bg-[hsl(var(--primary))] text-white' : 'bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))]'}`}><FolderOpen size={20} /></div><div><div className="flex flex-wrap items-center gap-2"><h2 className="font-display text-2xl">{collection.name}</h2>{collection.isPublished ? <Badge tone="success">Published</Badge> : <Badge>Archive</Badge>}</div><p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">{formatDate(collection.startDate)} — {formatDate(collection.endDate)} <span className="mx-1">·</span> /{collection.slug}</p></div></div><div className="flex items-center gap-2 sm:justify-end"><span className="mr-2 font-mono-ui text-[10px] text-[hsl(var(--muted-foreground))]">{index === 0 ? '48 products' : 'Closed'}</span>{!collection.isPublished && <button type="button" onClick={() => updateCollection.mutate({ collectionId: collection.id, data: { isPublished: true } })} className="rounded-full bg-[hsl(var(--primary))] px-4 py-2.5 text-xs font-semibold text-white" data-testid={`button-publish-collection-${collection.id}`}>Publish</button>}<IconButton label={`More actions for ${collection.name}`} onClick={() => { if (window.confirm('Delete this collection?')) deleteCollection.mutate({ collectionId: collection.id }); }}><MoreHorizontal size={16} /></IconButton></div></div>)}</div></div></AdminShell>;
 }
@@ -329,7 +343,8 @@ function CollectionsPage() {
 function CatalogueAdminPage() {
   const { data: catalogue } = useGetCatalogue(undefined, { query: { queryKey: getGetCatalogueQueryKey(), retry: false } });
   const generatePdf = useGenerateCataloguePdf();
-  const products = catalogue?.products?.length ? catalogue.products : fallbackProducts;
+  const catalogueProducts = normalizeList<Product>(catalogue?.products as ApiList<Product>);
+  const products = catalogueProducts.length ? catalogueProducts : fallbackProducts;
   const [gender, setGender] = useState('all');
   const [category, setCategory] = useState('all');
   const [brand, setBrand] = useState('all');
@@ -398,8 +413,9 @@ function BrandStoreCataloguePage() {
   const [gender, setGender] = useState(params.get('gender') || 'all');
   const [category, setCategory] = useState(params.get('category') || 'all');
   const [brand, setBrand] = useState(params.get('brand') || 'all');
-  const products = catalogue?.products?.length ? catalogue.products : fallbackProducts.filter((product) => product.isPublished);
-  const brands = catalogue?.availableBrands?.length ? catalogue.availableBrands : BRAND_OPTIONS;
+  const catalogueProducts = normalizeList<Product>(catalogue?.products as ApiList<Product>);
+  const products = catalogueProducts.length ? catalogueProducts : fallbackProducts.filter((product) => product.isPublished);
+  const brands = Array.isArray(catalogue?.availableBrands) && catalogue.availableBrands.length ? catalogue.availableBrands : BRAND_OPTIONS;
   const visible = products.filter((product) => (gender === 'all' || product.gender === gender) && (category === 'all' || product.category === category) && (brand === 'all' || product.brand === brand));
   const updateFilter = (key: 'gender' | 'category' | 'brand', value: string) => {
     const next = new URLSearchParams(location.split('?')[1] || '');
