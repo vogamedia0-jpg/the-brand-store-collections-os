@@ -48,7 +48,7 @@ import { generateBrandedCataloguePdf } from '@/lib/pdf';
 const queryClient = new QueryClient();
 const logo = '/assets/logo-gold.png';
 const logoDark = '/assets/logo-light.png';
-const heroImage = '/assets/brand-store-hero-temporary.png';
+const heroImage = '/assets/brand-store-hero-approved.png';
 const boardImage = '/assets/brand-board.png';
 const placeholderImage = '/assets/product-placeholder.png';
 const assetImageMap: Record<string, string> = {
