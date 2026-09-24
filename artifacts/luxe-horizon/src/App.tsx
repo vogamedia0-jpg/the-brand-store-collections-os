@@ -385,7 +385,7 @@ function CatalogueAdminPage() {
 function SettingsPage() {
   const { data } = useGetSettings({ query: { queryKey: getGetSettingsQueryKey(), retry: false } });
   const updateSettings = useUpdateSettings();
-  const [form, setForm] = useState({ whatsappNumber: data?.whatsappNumber || import.meta.env.VITE_BRAND_STORE_WHATSAPP || '', businessName: data?.businessName || 'The Brand Store', tagline: data?.tagline || 'Luxury lives here' });
+  const [form, setForm] = useState({ whatsappNumber: data?.whatsappNumber || import.meta.env.VITE_BRAND_STORE_WHATSAPP || '971523368432', businessName: data?.businessName || 'The Brand Store', tagline: data?.tagline || 'Luxury lives here' });
   const save = () => updateSettings.mutate({ data: form });
   return <AdminShell><div className="mx-auto max-w-[900px] px-5 py-8 sm:px-8 lg:px-10 lg:py-12"><PageIntro eyebrow="Settings" title="Catalogue settings" description="Manage the details used across catalogue links and contact actions." /><div className="grid gap-5 md:grid-cols-[1fr_.7fr]"><section className="rounded-2xl border border-[hsl(var(--card-border))] bg-[hsl(var(--card))] p-6 sm:p-8"><div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-full bg-[hsl(var(--muted))] text-[hsl(var(--primary))]"><MessageCircle size={18} /></div><div><h2 className="font-display text-2xl">WhatsApp enquiries</h2><p className="text-xs text-[hsl(var(--muted-foreground))]">Shown when a customer asks about a piece.</p></div></div><div className="mt-7 space-y-5"><label className="block text-xs font-semibold">WhatsApp number<input value={form.whatsappNumber} onChange={(event) => setForm({ ...form, whatsappNumber: event.target.value })} data-testid="input-whatsapp-number" className="mt-2 h-12 w-full rounded-lg border border-[hsl(var(--input))] bg-transparent px-3 text-sm outline-none focus:border-[hsl(var(--primary))]" /></label><label className="block text-xs font-semibold">Business name<input value={form.businessName} onChange={(event) => setForm({ ...form, businessName: event.target.value })} data-testid="input-business-name" className="mt-2 h-12 w-full rounded-lg border border-[hsl(var(--input))] bg-transparent px-3 text-sm outline-none focus:border-[hsl(var(--primary))]" /></label><label className="block text-xs font-semibold">Catalogue tagline<input value={form.tagline} onChange={(event) => setForm({ ...form, tagline: event.target.value })} data-testid="input-catalogue-tagline" className="mt-2 h-12 w-full rounded-lg border border-[hsl(var(--input))] bg-transparent px-3 text-sm outline-none focus:border-[hsl(var(--primary))]" /></label></div><button type="button" onClick={save} disabled={updateSettings.isPending} className="mt-8 inline-flex items-center gap-2 rounded-full bg-[hsl(var(--primary))] px-5 py-3 text-xs font-semibold text-white disabled:opacity-50" data-testid="button-save-settings">{updateSettings.isPending ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />} Save settings</button></section><aside className="rounded-2xl bg-[#eadcc6] p-6 sm:p-8"><p className="font-mono-ui text-[10px] uppercase tracking-[.18em] text-[#9a8f7f]">Preview</p><img src={logo} alt="The Brand Store" className="mt-7 h-12 w-auto object-contain object-left" /><p className="mt-4 max-w-[220px] font-display text-2xl leading-tight text-[#0b1f44]">{form.tagline}</p><div className="mt-10 border-t border-[#bca999] pt-4 text-xs text-[#9a8f7f]"><p>{form.businessName}</p><p className="mt-1">{form.whatsappNumber}</p></div></aside></div></div></AdminShell>;
 }
@@ -472,7 +472,7 @@ function ProductDetailPage() {
   if (!productData) return isLoading ? <div className="flex min-h-[100dvh] items-center justify-center bg-[#f8f5ed] text-[#0b1f44]"><Loader2 className="animate-spin" size={22} /></div> : <NotFound />;
   const product = productData;
   const images = product.images?.length ? product.images : [{ id: 'placeholder', imagePath: placeholderImage, isPrimary: true, sortOrder: 1 }];
-  const whatsappNumber = settings?.whatsappNumber || import.meta.env.VITE_BRAND_STORE_WHATSAPP || '';
+  const whatsappNumber = settings?.whatsappNumber || import.meta.env.VITE_BRAND_STORE_WHATSAPP || '971523368432';
   const publicUrl = `${window.location.origin}/catalogue/product/${product.id}`;
   const whatsappMessage = `Hi The Brand Store, I'm interested in this item 👇\n\n${publicUrl}\n\nIs it available?`;
   const whatsappHref = `https://wa.me/${whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent(whatsappMessage)}`;
@@ -518,6 +518,9 @@ function Router() {
     <Route path="/admin/analytics" component={AnalyticsPage} />
     <Route path="/admin/settings" component={SettingsPage} />
     <Route path="/catalogue/product/:productId" component={ProductDetailPage} />
+    <Route path="/catalogue/new-arrivals" component={BrandStoreCataloguePage} />
+    <Route path="/collections/:slug" component={BrandStoreCataloguePage} />
+    <Route path="/categories/:slug" component={BrandStoreCataloguePage} />
     <Route path="/catalogue" component={BrandStoreCataloguePage} />
     <Route path="/" component={BrandStoreCataloguePage} />
     <Route component={NotFound} />
