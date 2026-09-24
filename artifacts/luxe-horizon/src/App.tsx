@@ -48,7 +48,7 @@ import { generateBrandedCataloguePdf } from '@/lib/pdf';
 const queryClient = new QueryClient();
 const logo = '/assets/logo-gold.png';
 const logoDark = '/assets/logo-light.png';
-const heroImage = '/assets/hero.png';
+const heroImage = '/assets/brand-store-hero-temporary.png';
 const boardImage = '/assets/brand-board.png';
 const placeholderImage = '/assets/product-placeholder.png';
 const assetImageMap: Record<string, string> = {
@@ -391,6 +391,61 @@ function SettingsPage() {
   return <AdminShell><div className="mx-auto max-w-[900px] px-5 py-8 sm:px-8 lg:px-10 lg:py-12"><PageIntro eyebrow="House / Settings" title="Keep it considered." description="A small set of details that quietly shape every catalogue touchpoint." /><div className="grid gap-5 md:grid-cols-[1fr_.7fr]"><section className="rounded-2xl border border-[hsl(var(--card-border))] bg-[hsl(var(--card))] p-6 sm:p-8"><div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-full bg-[hsl(var(--muted))] text-[hsl(var(--primary))]"><MessageCircle size={18} /></div><div><h2 className="font-display text-2xl">WhatsApp enquiries</h2><p className="text-xs text-[hsl(var(--muted-foreground))]">Shown when a customer asks about a piece.</p></div></div><div className="mt-7 space-y-5"><label className="block text-xs font-semibold">WhatsApp number<input value={form.whatsappNumber} onChange={(event) => setForm({ ...form, whatsappNumber: event.target.value })} data-testid="input-whatsapp-number" className="mt-2 h-12 w-full rounded-lg border border-[hsl(var(--input))] bg-transparent px-3 text-sm outline-none focus:border-[hsl(var(--primary))]" /></label><label className="block text-xs font-semibold">Business name<input value={form.businessName} onChange={(event) => setForm({ ...form, businessName: event.target.value })} data-testid="input-business-name" className="mt-2 h-12 w-full rounded-lg border border-[hsl(var(--input))] bg-transparent px-3 text-sm outline-none focus:border-[hsl(var(--primary))]" /></label><label className="block text-xs font-semibold">Catalogue tagline<input value={form.tagline} onChange={(event) => setForm({ ...form, tagline: event.target.value })} data-testid="input-catalogue-tagline" className="mt-2 h-12 w-full rounded-lg border border-[hsl(var(--input))] bg-transparent px-3 text-sm outline-none focus:border-[hsl(var(--primary))]" /></label></div><button type="button" onClick={save} disabled={updateSettings.isPending} className="mt-8 inline-flex items-center gap-2 rounded-full bg-[hsl(var(--primary))] px-5 py-3 text-xs font-semibold text-white disabled:opacity-50" data-testid="button-save-settings">{updateSettings.isPending ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />} Save settings</button></section><aside className="rounded-2xl bg-[#eadcc6] p-6 sm:p-8"><p className="font-mono-ui text-[10px] uppercase tracking-[.18em] text-[#9a8f7f]">Preview</p><img src={logo} alt="The Brand Store" className="mt-7 h-12 w-auto object-contain object-left" /><p className="mt-4 max-w-[220px] font-display text-2xl leading-tight text-[#0b1f44]">{form.tagline}</p><div className="mt-10 border-t border-[#bca999] pt-4 text-xs text-[#9a8f7f]"><p>{form.businessName}</p><p className="mt-1">{form.whatsappNumber}</p></div></aside></div></div></AdminShell>;
 }
 
+function BrandStoreCataloguePage() {
+  const [location] = useLocation();
+  const { data: catalogue } = useGetCatalogue(undefined, { query: { queryKey: getGetCatalogueQueryKey(), retry: false } });
+  const params = new URLSearchParams(location.split('?')[1] || '');
+  const [gender, setGender] = useState(params.get('gender') || 'all');
+  const [category, setCategory] = useState(params.get('category') || 'all');
+  const [brand, setBrand] = useState(params.get('brand') || 'all');
+  const products = catalogue?.products?.length ? catalogue.products : fallbackProducts.filter((product) => product.isPublished);
+  const brands = catalogue?.availableBrands?.length ? catalogue.availableBrands : BRAND_OPTIONS;
+  const visible = products.filter((product) => (gender === 'all' || product.gender === gender) && (category === 'all' || product.category === category) && (brand === 'all' || product.brand === brand));
+  const updateFilter = (key: 'gender' | 'category' | 'brand', value: string) => {
+    const next = new URLSearchParams(location.split('?')[1] || '');
+    value === 'all' ? next.delete(key) : next.set(key, value);
+    if (key === 'gender') setGender(value);
+    if (key === 'category') setCategory(value);
+    if (key === 'brand') setBrand(value);
+    window.history.replaceState({}, '', `${window.location.pathname}${next.toString() ? `?${next}` : ''}`);
+  };
+  return <div className="min-h-[100dvh] bg-[#f8f5ed] text-[#0b1f44]">
+    <header className="border-b border-[#d8c8ad] bg-[#f8f5ed]">
+      <div className="mx-auto flex h-[82px] max-w-[1320px] items-center justify-between px-5 sm:px-8">
+        <Link href="/catalogue" aria-label="The Brand Store home"><AppLogo dark /></Link>
+        <nav className="hidden items-center gap-8 text-[11px] font-medium uppercase tracking-[.18em] md:flex"><a href="#collection">Collection</a><a href="#new-arrivals">New arrivals</a><a href="#about">About</a></nav>
+        <Link href="/catalogue" className="text-[11px] font-medium uppercase tracking-[.18em]">Catalogue</Link>
+      </div>
+    </header>
+    <main>
+      <section className="mx-auto max-w-[1320px] px-5 pb-10 pt-6 sm:px-8 sm:pb-14 sm:pt-10">
+        <div className="relative min-h-[430px] overflow-hidden bg-[#0b1f44] sm:min-h-[560px]">
+          <img src={heroImage} alt="Ivory and champagne objects arranged on deep navy architectural plinths" className="absolute inset-0 h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0b1f44]/90 via-[#0b1f44]/35 to-transparent" />
+          <div className="relative flex min-h-[430px] max-w-[560px] flex-col justify-end px-7 py-9 text-[#f8f5ed] sm:min-h-[560px] sm:px-14 sm:py-14">
+            <p className="text-[11px] font-medium uppercase tracking-[.22em] text-[#c9a96a]">The Brand Store</p>
+            <h1 className="mt-4 max-w-[440px] font-display text-5xl leading-[.98] tracking-[-.035em] sm:text-7xl">Luxury lives here.</h1>
+            <p className="mt-5 max-w-[380px] text-sm leading-6 text-[#f8f5ed]/80">A curated collection of exceptional pieces from distinctive houses.</p>
+            <a href="#new-arrivals" className="mt-7 inline-flex w-fit items-center gap-2 border-b border-[#c9a96a] pb-2 text-[11px] font-medium uppercase tracking-[.18em] text-[#f8f5ed]">Explore collection <ArrowUpRight size={14} /></a>
+          </div>
+        </div>
+      </section>
+      <section id="collection" className="mx-auto max-w-[1320px] px-5 sm:px-8">
+        <div className="flex flex-wrap items-center gap-2 border-y border-[#d8c8ad] py-3">
+          {['all', 'women', 'men'].map((item) => <button key={item} type="button" onClick={() => updateFilter('gender', item)} className={`px-3 py-2 text-[11px] font-medium uppercase tracking-[.16em] ${gender === item ? 'bg-[#0b1f44] text-[#f8f5ed]' : 'text-[#0b1f44]/65 hover:text-[#0b1f44]'}`}>{item === 'all' ? 'All' : item}</button>)}
+          <select aria-label="Filter by category" value={category} onChange={(event) => updateFilter('category', event.target.value)} className="ml-2 h-9 border-0 border-l border-[#d8c8ad] bg-transparent pl-4 text-[11px] uppercase tracking-[.12em] outline-none"><option value="all">All categories</option>{CATEGORY_GROUPS.flatMap((group) => group.options).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>
+          <select aria-label="Filter by brand" value={brand} onChange={(event) => updateFilter('brand', event.target.value)} className="h-9 border-0 border-l border-[#d8c8ad] bg-transparent pl-4 text-[11px] uppercase tracking-[.12em] outline-none"><option value="all">All brands</option>{brands.map((item) => <option key={item} value={item}>{item}</option>)}</select>
+        </div>
+      </section>
+      <section id="new-arrivals" className="mx-auto max-w-[1320px] px-5 pb-20 pt-14 sm:px-8 sm:pt-20">
+        <div className="mb-8 flex items-end justify-between border-b border-[#d8c8ad] pb-5"><div><p className="text-[11px] font-medium uppercase tracking-[.2em] text-[#9a8f7f]">New arrivals</p><h2 className="mt-2 font-display text-4xl tracking-[-.03em] sm:text-5xl">Latest arrivals</h2></div><span className="text-xs text-[#9a8f7f]">{visible.length} pieces</span></div>
+        {visible.length ? <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-6">{visible.map((product) => <Link key={product.id} href={`/catalogue/product/${product.id}`} className="group"><div className="aspect-[.78] overflow-hidden bg-[#eadcc6]"><img src={imageFor(product)} alt={`${product.brand || 'The Brand Store'} ${categoryLabels[product.category] || 'piece'}`} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.025]" /></div><p className="mt-4 text-sm font-medium">{product.brand || 'The Brand Store edit'}</p><p className="mt-1 text-[11px] uppercase tracking-[.14em] text-[#9a8f7f]">{categoryLabels[product.category] || product.category}</p></Link>)}</div> : <p className="py-20 text-center text-sm text-[#9a8f7f]">No pieces match this edit.</p>}
+      </section>
+    </main>
+    <footer id="about" className="border-t border-[#d8c8ad] px-5 py-8 sm:px-8"><div className="mx-auto flex max-w-[1320px] justify-between text-[11px] uppercase tracking-[.16em] text-[#9a8f7f]"><span>The Brand Store</span><span>Luxury lives here.</span></div></footer>
+  </div>;
+}
+
 function CataloguePage() {
   const [location] = useLocation();
   const { data: catalogue } = useGetCatalogue(undefined, { query: { queryKey: getGetCatalogueQueryKey(), retry: false } });
@@ -463,8 +518,8 @@ function Router() {
     <Route path="/admin/analytics" component={AnalyticsPage} />
     <Route path="/admin/settings" component={SettingsPage} />
     <Route path="/catalogue/product/:productId" component={ProductDetailPage} />
-    <Route path="/catalogue" component={CataloguePage} />
-    <Route path="/" component={CataloguePage} />
+    <Route path="/catalogue" component={BrandStoreCataloguePage} />
+    <Route path="/" component={BrandStoreCataloguePage} />
     <Route component={NotFound} />
   </Switch></ErrorBoundary>;
 }
