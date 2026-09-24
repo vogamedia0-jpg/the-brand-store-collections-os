@@ -36,14 +36,19 @@ export async function generateBrandedCataloguePdf(
   doc.rect(0, 0, 210, 297, 'F');
   doc.setFillColor(navy);
   doc.rect(0, 0, 210, 12, 'F');
-  doc.setTextColor(navy);
-  doc.setFont('times', 'italic');
-  doc.setFontSize(34);
-  doc.text('The Brand Store', 22, 82);
+  try {
+    const logo = await imageDataUrl('/assets/logo-gold.png');
+    doc.addImage(logo.data, logo.format, 23, 36, 64, 20, undefined, 'FAST');
+  } catch {
+    doc.setTextColor(navy);
+    doc.setFont('times', 'italic');
+    doc.setFontSize(34);
+    doc.text('THE BRAND STORE', 22, 82);
+  }
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
   doc.setTextColor(taupe);
-  doc.text('Luxury lives here', 23, 92);
+  doc.text('LUXURY LIVES HERE', 23, 92);
   doc.setDrawColor(gold);
   doc.line(23, 104, 78, 104);
   doc.setFontSize(14);
