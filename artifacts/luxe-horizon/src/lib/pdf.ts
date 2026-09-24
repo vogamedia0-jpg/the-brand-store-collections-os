@@ -51,9 +51,9 @@ export async function generateBrandedCataloguePdf(
   doc.text(title, 23, 124);
   doc.setFontSize(9);
   doc.setTextColor(taupe);
-  doc.text(`${products.length} pieces · Private edit`, 23, 133);
+  doc.text(`${products.length} pieces`, 23, 133);
   doc.setFontSize(8);
-  doc.text('Prepared for personal sharing through WhatsApp', 23, 270);
+  doc.text('THE BRAND STORE catalogue', 23, 270);
   doc.setTextColor(navy);
   doc.text('THE BRAND STORE', 23, 278);
 
@@ -80,7 +80,7 @@ export async function generateBrandedCataloguePdf(
     doc.setTextColor(navy);
     doc.setFont('times', 'normal');
     doc.setFontSize(16);
-    doc.text(product.brand || 'House edit', x, 144);
+    doc.text(product.brand || 'The Brand Store', x, 144);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(taupe);
     doc.setFontSize(8);
